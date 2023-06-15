@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Page Title</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <img src="static/img/ThreeH.png" alt="Logo" class="logo">
+      <div class="footer-buttons">
+        <button class="footer-button">Menu</button>
+        <button class="footer-button" type="button" onclick="location.href='/login'">Log In</button>
+        <button class="footer-button" type="button" onclick="location.href='/signup'">Sign Up</button>
+        <button class="footer-button">About Us</button>
+        <button class="footer-button">Contact Us</button>
+      </div>
+    </div>
+  </footer>
+
+  <div class="gray-box">
+    <h2>Introducing ChatGPT Helper</h2>
+    <p>Welcome to ChatGPT Helper! Our powerful tool is designed to make working with ChatGPT a breeze. Select and organize the answers you need from ChatGPT effortlessly. Say goodbye to sifting through long conversations – with ChatGPT Helper, you curate the responses that matter most and arrange them into your own customized page. Streamline your research, organize chat logs, and create transcripts with ease. Experience the efficiency of ChatGPT Helper today and take control of your ChatGPT interactions like never before.</p>
+    <button class="try-button" type="button" onclick="location.href='/main'">Try ChatGPT Helper</button>
+  </div>
+
+  <div class="sponsor-section">
+    <div class="sponsor-content">
+      <div class="sponsor-buttons">
+        <button class="sponsor-button-white">YouTube</button>
+        <button class="sponsor-button-white">GitHub</button>
+        <button class="sponsor-button-white">Figma</button>
+        <button class="sponsor-button-white">LinkedIn</button>
+        <button class="sponsor-button-white">Ewha</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="gray-box">
+    <div class="gray-box-content">
+      <div class="logo-row">
+        <img src="static/img/3H.png" alt="Young Logo">
+        <img src="static/img/3H.png" alt="Oh_Bom Logo">
+        <img src="static/img/3H.png" alt="Huda Logo">
+      </div>
+      <div class="contact-form">
+        <h3>Contact Us</h3>
+        <form>
+          <input type="text" placeholder="Name">
+          <input type="email" placeholder="Email">
+          <input type="text" placeholder="Subject">
+          <textarea placeholder="Type your message"></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="static/js/homepage.js"></script>
+</body>
+</html>
