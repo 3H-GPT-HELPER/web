@@ -10,6 +10,8 @@ import requests
 import json
 from django.http.request import HttpRequest
 
+from .models import Content
+
 
 def index(request):
     return render(request,'main/index.html')
@@ -22,6 +24,10 @@ def login(request):
 
 def main(request):
     print("this is main page")
+    
+    userContents=Content.objects.filter(userName="hw")
+    context={'contents':userContents}
+    
     
     #생각해보니 다 필요없고 proxy에서 받은 data user db에 넣은 후 
     #그거 보여주게 html짜면됨
@@ -38,7 +44,7 @@ def main(request):
     #     request.session['hey'] = data  # 세션에 데이터 저장
     #     datas=data
     
-    return render(request, 'main/main.html')
+    return render(request, 'main/main.html',context=context)
 
 
 @csrf_exempt
@@ -50,6 +56,10 @@ def proxy(request):
             answer=answer[0]
             print("!!!!!!!!!!!!!!!!!!!!!!")
             print(answer)
+            
+            #entity 생성 
+            content=Content(answer=answer)
+            content.save()
 
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')

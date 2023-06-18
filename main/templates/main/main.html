@@ -18,9 +18,12 @@
   </footer>
 
   {% comment %} chrome extension test {% endcomment %}
+  {%for content in contents%}
   <div id="data-container">
-    {{data}}
+    {{content.answer}}<br>
+    -------------------------------------------<br>
   </div>
+  {%endfor%}
 
   <div>
     <h4>GandCrab</h4>
