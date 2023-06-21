@@ -1,11 +1,10 @@
 {% load static %}
 {% csrf_token %}
 <!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 <html>
 <head>
-  <title>Your Page Title</title>
-  {% comment %} <script src="main.js"></script> {% endcomment %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
 </head>
 <body>
 
@@ -13,6 +12,8 @@
     <div class="footer-container">
       <div class="footer-buttons">
         <button class="footer-button">Topic</button>
+        <button calss="footer-buttom">Topic2</button>
+        <button calss="footer-buttom">Topic3</button>
       </div>
     </div>
   </footer>
@@ -20,8 +21,20 @@
   {% comment %} chrome extension test {% endcomment %}
   {%for content in contents%}
   <div id="data-container">
-    {{content.keywords}}
-    {{content.answer}}<br>
+    <div class="keywords_container">
+      selected keywords:
+      <div class="keywords">
+        {{content.keywords}}
+      </div>
+     
+    </div>
+    <br>
+    
+    <div class="answer">
+      answers:
+      {{content.answer}}
+    </div>
+    <br>
     -------------------------------------------<br>
     
   </div>

@@ -1,0 +1,20 @@
+.keywords_container{
+    background-color: rgb(242, 242, 111);
+    text-decoration-color: blueviolet;
+}
+
+.footer-buttons{
+    border-style: none;
+    border-color:black;
+}
+
+.keywords{
+    text-decoration: solid;
+    text-decoration: underline;
+}
+
+.answer{
+    background-color: blanchedalmond;
+    
+
+}
