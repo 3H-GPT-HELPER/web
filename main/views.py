@@ -43,11 +43,30 @@ def main(request):
     print("this is main page")
     
     userContents=Content.objects.filter(userName="hw")
-    userkeywords=UserKeywords.objects.filter(user_id__name='hw')
-    context={'contents':userContents,'userkeywords':userkeywords}
+    context={'contents':userContents}
     #preprocessing(userContents)
     
     return render(request, 'main/main.html',context=context)
+
+def category(request):
+    userkeywords=UserKeywords.objects.filter(user_id__name='hw')
+    context={'userkeywords':userkeywords}
+    
+    #우선 여기에 topic 과 category 매칭 코드 구현:return값 해당 category_id
+    #content의 topcisd와 userkeywords의 name을 비교하면됨 그 후 select된 걸 content.category로 지정
+    #index=content.objects.filter(category__serKeywords_id)로 번호 할당받기
+    #index별로 detail페이지 생성
+    
+    
+
+    return render(request,"main/category.html",context=context)
+
+def category_detail(request,category_id):
+    #category_id와 동일하게 분류된 content를 filter 그 contents던지기
+    userContents=Content.objects.filter(userName="hw")
+    
+
+    return render(request,'detail.html',{'category_id':category_id})
 
 
 @csrf_exempt
@@ -72,8 +91,7 @@ def proxy(request):
             content.topics = topic
             content.save()
             #print(type(content))
-            
-            #print(pd.DataFrame.from_records(answer_str))
+
 
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')

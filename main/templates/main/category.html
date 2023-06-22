@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category</title>
+</head>
+<body>
+
+    <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-buttons">
+            <button class="footer-button">MENU</button>
+            <button class="footer-button">USER</button>
+            <button class="footer-button">ABOUT</button>
+            <button class="footer-button">CONTACT</button>
+          </div>
+        </div>
+      </footer>
+
+    <div class="category-container">
+        <div class="category">Category</div>
+    </div>
+
+    <div class="category-topic">
+        {%for category in userkeywords %}
+        <div class="topic">{{category.name}}</div>
+        {%endfor%}
+        <!-- <div class="topic">Gandcrab</div>
+        <div class="topic">Database</div>
+        <div class="topic">Digital Forensic</div>
+        <div class="topic">Blockchain</div>
+        <div class="topic">Cryptography</div> -->
+    </div>
+
+</body>
+</html>
