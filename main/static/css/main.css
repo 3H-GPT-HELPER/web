@@ -1,0 +1,59 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+.footer {
+    background-color: black;
+    height: 61px;
+    margin-bottom: 30px;
+}
+
+.footer-buttons {
+    background-color: black;
+    color: white;
+    font-size: large;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 20px 45px;
+    border: none;
+    cursor: pointer;
+}
+
+.footer-buttons:hover {
+    background-color: blanchedalmond;
+    color:black;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+#data-container{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin: 40px;
+    animation-name: fadeIn;
+    animation-duration: 3s;
+    animation-play-state: running;
+}
+
+.keywords-container {
+    background-color:black;
+    color:blanchedalmond;
+    padding: 20px;
+
+}
+
+.keywords{
+    text-decoration: underline;
+}
+
+.answer-container {
+    background-color:blanchedalmond;
+    color:black;
+    padding: 20px;
+}
+.answer{
+    background-color: none;
+}
