@@ -56,17 +56,36 @@ def category(request):
     #content의 topcisd와 userkeywords의 name을 비교하면됨 그 후 select된 걸 content.category로 지정
     #index=content.objects.filter(category__serKeywords_id)로 번호 할당받기
     #index별로 detail페이지 생성
+
+    #전달받은 top topic 3개 리스트와 UserKeywords.name 중 동일한거 match 후 그 유저키워드.네임을 content.category로 지정 이거 초반에 content.save할때완료
+
+
+
     
     
 
     return render(request,"main/category.html",context=context)
 
 def category_detail(request,category_id):
-    #category_id와 동일하게 분류된 content를 filter 그 contents던지기
-    userContents=Content.objects.filter(userName="hw")
-    
 
-    return render(request,'detail.html',{'category_id':category_id})
+    #usesrkeywords.name이랑 content.category랑 같으면 그 content들을 가져와서 보낸다.
+    #userkeywords.id를 페이지 id로 넘긴다
+
+    #category 1
+    uk=UserKeywords.objects.get(userKeywords_id=category_id)
+    
+    uk_name=uk.name
+    category_id=uk.userKeywords_id
+    userContents=Content.objects.filter(category=uk_name)
+    context={'contents':userContents,'category_id':category_id}
+    #category 2
+
+    #category_id와 동일하게 분류된 content를 filter 그 contents던지기
+    #userContents=Content.objects.filter(userName="hw")
+    
+    #category->userKeywords_id를 받은거로 detail 페이지 생성
+
+    return render(request,'main/detail.html',context=context)
 
 
 @csrf_exempt
@@ -85,10 +104,17 @@ def proxy(request):
             #entity 생성 
             content=Content(answer=answer_str)
             
-            topic = preprocessing(answer_str)
+            topics = preprocessing(answer_str)
             #print(topic)
             
-            content.topics = topic
+            topic_arr = topics.split("/")
+            content.topics = topics
+
+            
+            category=get_category(topic_arr)
+            print(category)
+            content.category=category
+
             content.save()
             #print(type(content))
 
@@ -125,9 +151,9 @@ def preprocessing(answer):
     
     topic = get_topics(lda_model.components_,vectorizer.get_feature_names_out())
     #print('/'.join(topic))
-    keywords= '/'.join(topic)
+    topics= '/'.join(topic)
     
-    return keywords
+    return topics
     
     
     
@@ -149,3 +175,21 @@ def get_topics(components, feature_names, n=3):
     print(top_features)
         
     return top_features
+
+#둘다 리스트로 보내서 돌려봐요,,
+def get_category(top_features):
+    selected_category=""
+    userkeywords_set=UserKeywords.objects.filter(user_id__name='hw')
+    uk_list=[]
+    for k in userkeywords_set:
+        uk_list.append(k.name)
+
+    print("???")
+    print(top_features,uk_list)
+
+    for item in top_features:
+        if item in uk_list:
+            selected_category=item
+    
+    return selected_category
+

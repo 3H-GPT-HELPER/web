@@ -1,19 +1,19 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Category</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/category.css' %}">
+  <title>Category</title>
 </head>
 <body>
 
     <footer class="footer">
         <div class="footer-container">
-          <div class="footer-buttons">
-            <button class="footer-button">MENU</button>
-            <button class="footer-button">USER</button>
-            <button class="footer-button">ABOUT</button>
-            <button class="footer-button">CONTACT</button>
-          </div>
-        </div>
+            <button class="footer-buttons">HOME</button>
+            <button class="footer-buttons">USER</button>
+            <button class="footer-buttons">ABOUT</button>
+            <button class="footer-buttons">CONTACT</button>
       </footer>
 
     <div class="category-container">
@@ -21,14 +21,15 @@
     </div>
 
     <div class="category-topic">
-        {%for category in userkeywords %}
-        <div class="topic">{{category.name}}</div>
-        {%endfor%}
-        <!-- <div class="topic">Gandcrab</div>
-        <div class="topic">Database</div>
-        <div class="topic">Digital Forensic</div>
-        <div class="topic">Blockchain</div>
-        <div class="topic">Cryptography</div> -->
+      {%for category in userkeywords %}
+        <button class="topic-buttons" onclick="location.href='/category/{{category.userKeywords_id}}'">{{category.name}}</button>
+      {%endfor%}
+        <!-- <button class="topic-buttons" onclick="location.href='/main'">Gandcrab<button>
+        <button class="topic-buttons">Database</button>
+        <button class="topic-buttons">Digital Forensic</button>
+        <button class="topic-buttons">Blockchain</button>
+        <button class="topic-buttons">Cryptography</button>  -->
+
     </div>
 
 </body>

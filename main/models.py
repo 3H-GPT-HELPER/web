@@ -7,5 +7,5 @@ class Content(models.Model):
     answer=models.TextField()
     topics=models.TextField(default="")
 
-    category=models.ForeignKey(UserKeywords,on_delete=models.SET_NULL, null=True)
+    category=models.CharField(max_length=20,default="")
     
