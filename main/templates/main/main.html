@@ -10,32 +10,29 @@
 
   <footer class="footer">
     <div class="footer-container">
-      <div class="footer-buttons">
-        <button class="footer-button">Topic</button>
-        <button calss="footer-buttom">Topic2</button>
-        <button calss="footer-buttom">Topic3</button>
-      </div>
-    </div>
+        <button class="footer-buttons">Topic1</button>
+        <button class="footer-buttons">Topic2</button>
+        <button class="footer-buttons">Topic3</button>
   </footer>
 
   {% comment %} chrome extension test {% endcomment %}
   {%for content in contents%}
   <div id="data-container">
-    <div class="keywords_container">
-      selected keywords:
+    <div class="keywords-container">
+      Selected keywords:
       <div class="keywords">
         {{content.keywords}}
       </div>
-     
     </div>
-    <br>
     
-    <div class="answer">
-      answers:
-      {{content.answer}}
+    <div class="answer-container">
+      Answers:
+      <div class="answer">
+        {{content.answer}}
+      </div>
     </div>
     <br>
-    -------------------------------------------<br>
+    <br>
     
   </div>
   {%endfor%}
