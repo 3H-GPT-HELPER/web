@@ -10,9 +10,13 @@
 
   <footer class="footer">
     <div class="footer-container">
-        <button class="footer-buttons">Topic1</button>
-        <button class="footer-buttons">Topic2</button>
-        <button class="footer-buttons">Topic3</button>
+      <div class="footer-buttons">
+        {%for topic in topics%}
+        <button class="footer-button">{{topic}}</button>
+        {%endfor%}
+        
+      </div>
+    </div>
   </footer>
 
   {% comment %} chrome extension test {% endcomment %}
@@ -21,7 +25,7 @@
     <div class="keywords-container">
       Selected keywords:
       <div class="keywords">
-        {{content.keywords}}
+        {{content.topics}}
       </div>
     </div>
     

@@ -10,6 +10,7 @@ html, body {
     margin-bottom: 30px;
 }
 
+
 .footer-buttons {
     background-color: black;
     color: white;
@@ -23,6 +24,10 @@ html, body {
 .footer-buttons:hover {
     background-color: blanchedalmond;
     color:black;
+}
+
+.footer-button{
+    color:white;
 }
 
 @keyframes fadeIn {
