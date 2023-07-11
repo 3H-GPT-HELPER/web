@@ -160,7 +160,7 @@ def preprocessing_eng(data):
     vectorizer = TfidfVectorizer(stop_words='english',max_features=10)
     X = vectorizer.fit_transform(context)
     
-    return X, vectorizer
+    return X, vectorizer 
     
 def preprocessing_kr(data):
     okt = Okt()
