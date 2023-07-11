@@ -122,12 +122,18 @@
       </div>
     </form>
 
-    <button onclick="location.href='/accounts/google/login'">
+    <button> 
+    <!-- onclick="location.href='/accounts/google/login'" -->
+    
       sign in with google login
     </button>
-    <button>
+    <button onclick="location.href='/user'">
       sign in with kakao login
     </button>
+
+    {% load socialaccount %}
+    <button type="button" onclick="location.href = '{% provider_login_url 'kakao' %}'"></button>
+    
   </div>
 </body>
 </html>

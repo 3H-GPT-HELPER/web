@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os,json
 
 #encoding
 DEFAULT_CHARSET='utf-8'
@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 
+    #kakao login
+    'allauth.socialaccount.providers.kakao',
 ]
 
 LOGIN_URL='account_login'
@@ -69,9 +71,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-SOCIALACCOUNT_QUERY_EMAIL = True
-SOCIALACCOUNT_EMAIL_REQUIRED = True
+
 
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -88,8 +88,19 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret':'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',
             'key':''
         }
+    },
+
+    'kakao':{
+        'APP':{
+            'client_id':'ab143070c987ae072f64e7796aa6622a',
+            'secret':'oEMteera7gGjo8No8Ix7XqM5CRnjvqqc',
+        }
+
     }
 }
+
+LOGIN_REDIRECT_URL = ''#로그인 후 연결될 url
+ACCOUNT_LOGOUT_REDIRECT_URL = 'user' #logout후 연결 url
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
