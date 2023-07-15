@@ -113,12 +113,14 @@ def kakaoLoginRedirect(request):
         agree_on_nickname=user_info.get('profile_needs_agreement')
         if not agree_on_nickname:
             profile=user_info.get("profile")
-            name=user_info.get('nickname')
+            nickname=profile['nickname']
         
         agree_on_email=user_info.get('eamil_needs_agreement')
 
         if not agree_on_email:
             email=user_info.get('email')
+        
+        print(nickname,email)
 
         user=User.objects.create(
             name=nickname,
