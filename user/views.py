@@ -58,15 +58,13 @@ def kakaoLogin(request):
     return redirect(url)
 
 def kakaoLoginRedirect(request):
-    print("?")
-    
     code=request.GET['code']
     #url = f'https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={restApiKey}&redirect_uri={redirectUrl}&code={code}'
     url="https://kauth.kakao.com/oauth/token"
     res={
         'grant_type':'authorization_code',
         'client_id':restApiKey,
-        'redirect_url':redirectUrl,
+        'redirect_uri':redirectUrl,
         'client_secret':client_secret,
         'code':code
     }
@@ -79,12 +77,13 @@ def kakaoLoginRedirect(request):
 
     tokenJson=response.json()
 
+    
     #get userInfo
     userUrl = "https://kapi.kakao.com/v2/user/me"
-    auth='Bearer'+tokenJson['access_token']
+    auth='Bearer '+tokenJson['access_token']
     header={
         'Authorization':auth,
-        # "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     }
 
     res=requests.get(userUrl,headers=header)
@@ -92,9 +91,10 @@ def kakaoLoginRedirect(request):
         info=res.json()
     except:
         info=None
+    print(info)
     kakao_id=str(info.get("id"))
 
-    print(info,kakao_id)
+    # print(info,kakao_id)
 
     try:
         test=User.objects.get(user_id=kakao_id)
