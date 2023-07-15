@@ -28,9 +28,17 @@ import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 
-import numpy as np
+from django.contrib.auth.models import User
+
 
 def index(request):
+    users = User.objects.all()
+
+    for user in users:
+        print(user.email)
+    # for user in users:
+    #     user.delete()
+
     return render(request,'main/index.html')
 
 def signup(request):

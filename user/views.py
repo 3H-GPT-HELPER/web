@@ -5,6 +5,8 @@ import json
 from .models import User
 from django.template import loader
 from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import authenticate,login
+
 
 #from allauth.socialaccount.models import SocialAccount
 
@@ -91,7 +93,7 @@ def kakaoLoginRedirect(request):
         info=res.json()
     except:
         info=None
-    print(info)
+    #print(info)
     kakao_id=str(info.get("id"))
 
     # print(info,kakao_id)
@@ -101,6 +103,7 @@ def kakaoLoginRedirect(request):
     except User.DoesNotExist:
         test=None
 
+    print(test)
     if test is None:
         nickname="default"
         email='default'
@@ -111,55 +114,75 @@ def kakaoLoginRedirect(request):
         #     nickname=profile.get('nickname')
 
         agree_on_nickname=user_info.get('profile_needs_agreement')
+        print(agree_on_nickname)
         if not agree_on_nickname:
             profile=user_info.get("profile")
             nickname=profile['nickname']
         
         agree_on_email=user_info.get('eamil_needs_agreement')
 
+        print(agree_on_email)
+
         if not agree_on_email:
             email=user_info.get('email')
         
-        print(nickname,email)
+        # print(nickname,email,kakao_id)
 
-        user=User.objects.create(
+        print("!!!!")
+        user=User(
             name=nickname,
-            email_address=email
+            email_address=email,
+            user_id=kakao_id,
+            password="",
         )
+        print("?????")
+        print(user)
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        user.save()
 
+        # Authenticate the user
+        authenticated_user = authenticate(request, username=user.email_address, password="")
+        if authenticated_user is not None:
+            authenticated_user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, authenticated_user)  # 사용자를 로그인 상태로 만듭니다.
+
+    else:print(test)
+    
     return render(request,'user/login_success.html')
 
 
 
 def kakaoLogout(request):
-    # token=request.session['access_token']
+    print(request.user)
+    kakao_id=request.user.user_id
+    token=request.session['access_token']
     url='https://kapi.kakao.com/v1/user/logout'
-    # header={
-    #     'Authorization':f'bearer {token}'
+    header={
+        'Authorization':f'bearer {token}'
+    }
+
+    res=requests.post(url,headers=header)
+    result=res.json()
+    # target_id=request.user.kakao_id
+    # target_id=int(target_id)
+    # auth='KakaoAK'+admin_key
+    # headers={
+    #     'Authorization':auth,
+    #     "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     # }
 
-    # res=requests.post(url,headers=header)
-    # result=res.json()
-    target_id=request.user.kakao_id
-    target_id=int(target_id)
-    auth='KakaoAK'+admin_key
-    headers={
-        'Authorization':auth,
-        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-    }
+    # data={
+    #     'target_id_type':'user_id',
+    #     'target_id':target_id
+    # }
 
-    data={
-        'target_id_type':'user_id',
-        'target_id':target_id
-    }
-
-    res=requests.post(
-        url,headers=headers,data=data
-    ).json()
+    # res=requests.post(
+    #     url,headers=headers,data=data
+    # ).json()
 
     response=res.get("id")
 
-    if target_id!=response:
+    if kakao_id!=response:
         return render(request,'user/logoutError.html')
     
     else:

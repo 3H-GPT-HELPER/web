@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.google',
 
     #kakao login
     'allauth.socialaccount.providers.kakao',
@@ -63,7 +63,7 @@ INSTALLED_APPS = [
 
 LOGIN_URL='account_login'
 
-SITE_ID=1
+SITE_ID=4
 
 AUTHENTICATION_BACKENDS = [
     # ...
@@ -112,6 +112,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    
 ]
 
 #cors 설정
