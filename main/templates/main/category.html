@@ -21,8 +21,8 @@
     </div>
 
     <div class="category-topic">
-      {%for category in userkeywords %}
-        <button class="topic-buttons" onclick="location.href='/category/{{category.userKeywords_id}}'">{{category.name}}</button>
+      {%for category in userCategories %}
+        <button class="topic-buttons" onclick="location.href='/category/{{category.userCategory_id}}'">{{category.inserted_category}}</button>
       {%endfor%}
         <!-- <button class="topic-buttons" onclick="location.href='/main'">Gandcrab<button>
         <button class="topic-buttons">Database</button>

@@ -11,7 +11,7 @@ import json
 from django.http.request import HttpRequest
 
 from .models import Content
-from user.models import UserKeywords
+from user.models import UserCategory
 
 #pip install nltk, scikit-learn, pandas 필요
 import nltk
@@ -36,8 +36,6 @@ def index(request):
 
     for user in users:
         print(user.email)
-    # for user in users:
-    #     user.delete()
 
     return render(request,'main/index.html')
 
@@ -57,41 +55,20 @@ def main(request):
     return render(request, 'main/main.html',context=context)
 
 def category(request):
-    userkeywords=UserKeywords.objects.filter(user_id__name='hw')
-    context={'userkeywords':userkeywords}
-    
-    #우선 여기에 topic 과 category 매칭 코드 구현:return값 해당 category_id
-    #content의 topcisd와 userkeywords의 name을 비교하면됨 그 후 select된 걸 content.category로 지정
-    #index=content.objects.filter(category__serKeywords_id)로 번호 할당받기
-    #index별로 detail페이지 생성
-
-    #전달받은 top topic 3개 리스트와 UserKeywords.name 중 동일한거 match 후 그 유저키워드.네임을 content.category로 지정 이거 초반에 content.save할때완료
-
-
-
-    
-    
-
+    userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+    context={'userCategories':userCategories}
+   
     return render(request,"main/category.html",context=context)
 
 def category_detail(request,category_id):
 
-    #usesrkeywords.name이랑 content.category랑 같으면 그 content들을 가져와서 보낸다.
-    #userkeywords.id를 페이지 id로 넘긴다
-
-    #category 1
-    uk=UserKeywords.objects.get(userKeywords_id=category_id)
+    #category_id는 자동생성 및 전달되는 pk
+    uc=UserCategory.objects.get(userCategory_id=category_id)
     
-    uk_name=uk.name
-    category_id=uk.userKeywords_id
-    userContents=Content.objects.filter(category=uk_name)
+    uc_name=uc.inserted_category
+    category_id=uc.userCategory_id
+    userContents=Content.objects.filter(inserted_category=uc_name)
     context={'contents':userContents,'category_id':category_id}
-    #category 2
-
-    #category_id와 동일하게 분류된 content를 filter 그 contents던지기
-    #userContents=Content.objects.filter(userName="hw")
-    
-    #category->userKeywords_id를 받은거로 detail 페이지 생성
 
     return render(request,'main/detail.html',context=context)
 
@@ -102,30 +79,22 @@ def proxy(request):
         try:
             data=json.loads(request.body.decode('utf-8'))
             answer=data['data']
-            #answer=answer[0]
-            print("!!!!!!!!!!!!!!!!!!!!!!")
-            print(type(answer))
-            
             answer_str = ''.join(answer)
             print(answer_str)
             
-            #entity 생성 
+            #content entity 생성 
             content=Content(answer=answer_str)
-            
             topics = preprocessing(answer_str)
-            #print(topic)
-            
             topic_arr = topics.split("/")
             content.topics = topics
 
-            
             category=get_category(topic_arr)
             print(category)
-            content.category=category
+
+            content.selected_category=category
 
             content.save()
-            #print(type(content))
-
+            
 
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')
@@ -185,12 +154,13 @@ def get_topics(components, feature_names, n=3):
     return top_features
 
 #둘다 리스트로 보내서 돌려봐요,,
-def get_category(top_features):
+def get_category(request,top_features):
     selected_category=""
-    userkeywords_set=UserKeywords.objects.filter(user_id__name='hw')
+    #userkeywords_set=UserCategory.objects.filter(user_id__name='hw')
+    userkeywords_set=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     uk_list=[]
     for k in userkeywords_set:
-        uk_list.append(k.name)
+        uk_list.append(k.inserted_category)
 
     print("???")
     print(top_features,uk_list)

@@ -6,36 +6,8 @@ from .models import User
 from django.template import loader
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate,login
+from django.contrib.auth.backends import ModelBackend
 
-
-#from allauth.socialaccount.models import SocialAccount
-
-# def google_profile(request):
-#     try:
-#         # 현재 로그인된 사용자 가져오기
-#         user = request.user
-        
-#         # SocialAccount 모델을 통해 Google Social Account 가져오기
-#         social_account = SocialAccount.objects.get(user=user, provider='google')
-        
-#         # Google에서 제공하는 사용자 정보 가져오기
-#         extra_data = social_account.extra_data
-#         google_email = extra_data.get('email')
-#         google_name = extra_data.get('name')
-        
-#         # 추가 작업 수행
-#         # ...
-        
-#     except SocialAccount.DoesNotExist:
-#         # Social Account가 없는 경우 처리
-#         pass
-    
-#     context={
-#         'google_email':google_email,
-#         'google_name':google_name,
-#     }
-
-#     return render(request,'user/profile.html',context)
 
 #kakao login(나중에 settings.py나 secrets.json으로 옮기기)
 restApiKey='ab143070c987ae072f64e7796aa6622a'
@@ -137,19 +109,21 @@ def kakaoLoginRedirect(request):
         )
         print("?????")
         print(user)
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        user.backend = f"{ModelBackend.__module__}.{ModelBackend.__name__}"
         user.save()
 
         # Authenticate the user
-        authenticated_user = authenticate(request, username=user.email_address, password="")
+        authenticated_user = authenticate(request, username=user.name, password="")
         if authenticated_user is not None:
-            authenticated_user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, authenticated_user)  # 사용자를 로그인 상태로 만듭니다.
+            return render(request,'user/login_success.html')
 
-    else:print(test)
+
+    else:
+        print(test)
+        redirect("http://127.0.0.1:8000/") 
     
-    return render(request,'user/login_success.html')
-
+    
 
 
 def kakaoLogout(request):
