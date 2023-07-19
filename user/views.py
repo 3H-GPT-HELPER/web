@@ -109,7 +109,7 @@ def kakaoLoginRedirect(request):
         )
         print("?????")
         print(user)
-        user.backend = f"{ModelBackend.__module__}.{ModelBackend.__name__}"
+        #user.backend = f"{ModelBackend.__module__}.{ModelBackend.__name__}"
         user.save()
 
         # Authenticate the user
@@ -117,7 +117,9 @@ def kakaoLoginRedirect(request):
         if authenticated_user is not None:
             login(request, authenticated_user)  # 사용자를 로그인 상태로 만듭니다.
             return render(request,'user/login_success.html')
-
+        
+        else:
+            return HttpResponse("login failed, try again.")
 
     else:
         print(test)
