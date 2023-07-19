@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from . import views
 from main.views import proxy
 
@@ -10,5 +10,6 @@ urlpatterns = [
     path('category/',views.category,name="category"),
     path('category/<int:category_id>/',views.category_detail,name="detail_page"),
     path('proxy',views.proxy,name='proxy'),
+
     
 ]

@@ -48,7 +48,48 @@ INSTALLED_APPS = [
     "main",
     'user',
     'corsheaders',
+
+
+    # google login
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
 ]
+
+LOGIN_URL='account_login'
+
+SITE_ID=1
+
+AUTHENTICATION_BACKENDS = [
+    # ...
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile', 
+            'email', #저는 email 주소 정보도 받아오고 싶어서 추가해줬습니다
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online'
+        },
+        'APP':{
+            'client_id':'100067194864-52a9u2jou2c86geucl8k8nmm2fqup7rc.apps.googleusercontent.com',
+            'secret':'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',
+            'key':''
+        }
+    }
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
