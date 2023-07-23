@@ -2,138 +2,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login</title>
-  <style>
-
-.footer {
-    background-color: #f2f2f2;
-    padding: 20px;
-    text-align: center;
-    max-width: 100%;
-  }
-  
-  .footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .logo {
-    height: 40px;
-  }
-  
-  .footer-buttons {
-    display: flex;
-  }
-  
-  .footer-button {
-    margin-right: 10px;
-    padding: 8px 12px;
-    background-color: #555555;
-    color: #ffffff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .footer-button:hover {
-    background-color: #333333;
-  }
-    body {
-      background-color: #f1f1f1;
-      font-family: Arial, sans-serif;
-    }
-
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .form-group input[type="text"],
-    .form-group input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
-
-    .form-group input[type="submit"] {
-      width: 100%;
-      padding: 10px;
-      background-color: #555555;
-      color: #ffffff;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-
-    .form-group input[type="submit"]:hover {
-      background-color: #333333;
-    }
-  </style>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'js/homepage.css' %}"></script>
 </head>
+
 <body>
+  <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+    role="banner" class="navigation w-nav">
+    <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}" width="65" alt="" class="logo-image" /></a>
+    </div>
+    </div>
 
-    <footer class="footer">
-        <div class="footer-container">
-          <img src="{% static 'img/ThreeH.png' %}" alt="Logo" class="logo">
-          <div class="footer-buttons">
-            <button class="footer-button">Menu</button>
-            <button class="footer-button">Log In</button>
-            <button class="footer-button">Sign Up</button>
-            <button class="footer-button">About Us</button>
-            <button class="footer-button">Contact Us</button>
-          </div>
+</div>
+    <div class="w-users-userformpagewrap">
+        <div class="w-users-userloginformwrapper">
+            <form data-wf-user-form-type="login" data-wf-user-form-redirect="/" method="post">
+                <div class="w-users-userformheader">
+                    <h2>Log in</h2>
+                </div><label for="Email">Email</label><input type="email" maxlength="256" placeholder="" name="Email"
+                    id="wf-log-in-email" class="w-input" autoComplete="username" required=""
+                    data-wf-user-form-input-type="email" /><label for="Password">Password</label><input type="password"
+                    maxlength="256" placeholder="" name="Password" id="wf-log-in-password" class="w-input" required=""
+                    data-wf-user-form-input-type="password" /><input type="submit" value="Log In"
+                    data-wait="Please wait..." class="w-users-userformbutton submit-button w-button" />
+                <div class="w-users-userformfooter"><span>Don&#x27;t have an account?</span><a href="/signup"
+                        class="w-inline-block">Sign Up</a></div>
+            </form>
+            <div style="display:none" data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
+                <div class="user-form-error-msg"
+                    wf-login-form-general-error-error="We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have problems."
+                    wf-login-form-invalid-email_or_password-error="Invalid email or password. Please try again.">
+                    We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have
+                    problems.</div>
+            </div>
         </div>
-      </footer>
-      
-  <div class="container">
-    <h2>Login</h2>
-    <form>
-      <div class="form-group">
-        <label for="Email">Email</label>
-        <input type="text" id="email" placeholder="Enter your email">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password">
-      </div>
-      <div class="form-group">
-        <input type="submit" value="Login">
-      </div>
-    </form>
-
-    <button> 
-    <!-- onclick="location.href='/accounts/google/login'" -->
-    
-      sign in with google login
-    </button>
-    <button onclick="location.href='/user'">
-      sign in with kakao login
-    </button>
-
-    {% load socialaccount %}
-    <button type="button" onclick="location.href = '{% provider_login_url 'kakao' %}'"></button>
-    
-  </div>
+    </div>
 </body>
+
 </html>
