@@ -276,7 +276,6 @@ html.w-mod-touch * {
   color: #fff;
   line-height: inherit;
   cursor: pointer;
-  background-color: #3898ec;
   border: 0;
   border-radius: 0;
   padding: 9px 15px;
@@ -4406,12 +4405,19 @@ figcaption {
 }
 
 .text-block {
-  color: #b4d7c4;
+  color: #2e1a77;
 }
 
 .text-block-2, .text-block-3 {
-  color: #f96262;
+  color: #2e1a77;
   font-size: 14px;
+}
+
+.text-block-6 {
+  color: #43464d;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .heading {
@@ -4439,9 +4445,6 @@ figcaption {
   font-size: 14px;
 }
 
-.text-block-4, .text-block-5 {
-  color: #f96262;
-}
 
 .heading-3 {
   font-family: Inconsolata, monospace;
