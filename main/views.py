@@ -84,12 +84,17 @@ def proxy(request):
     if request.method == 'POST':    
         try:
             data=json.loads(request.body.decode('utf-8'))
-            answer=data['data']
+            answer=data['pTagContents']
+            full_answer=data['complexContents']
+            
             answer_str = ''.join(answer)
+            fullanswer_str = ''.join(full_answer)
+            
             print(answer_str)
+            print(fullanswer_str)
             
             #content entity 생성 
-            content=Content(answer=answer_str)
+            content=Content(answer=fullanswer_str)
             topics = preprocessing(answer_str)
             topic_arr = topics.split("/")
             content.topics = topics
