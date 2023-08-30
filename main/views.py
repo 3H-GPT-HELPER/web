@@ -87,8 +87,8 @@ def proxy(request):
             answer=data['pTagContents']
             full_answer=data['complexContents']
             
-            answer_str = ''.join(answer)
-            fullanswer_str = ''.join(full_answer)
+            answer_str = ''.join(answer) #text만 있는 답변
+            fullanswer_str = ''.join(full_answer) #코드까지 합쳐진 답변
             
             print(answer_str)
             print(fullanswer_str)
