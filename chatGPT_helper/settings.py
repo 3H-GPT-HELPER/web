@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os,json
 
 #encoding
 DEFAULT_CHARSET='utf-8'
@@ -48,7 +48,60 @@ INSTALLED_APPS = [
     "main",
     'user',
     'corsheaders',
+
+
+    # google login
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
+
+    #kakao login
+    'allauth.socialaccount.providers.kakao',
 ]
+
+LOGIN_URL='account_login'
+
+SITE_ID=4
+
+AUTHENTICATION_BACKENDS = [
+    # ...
+    
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile', 
+            'email', #저는 email 주소 정보도 받아오고 싶어서 추가해줬습니다
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online'
+        },
+        'APP':{
+            'client_id':'100067194864-52a9u2jou2c86geucl8k8nmm2fqup7rc.apps.googleusercontent.com',
+            'secret':'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',
+            'key':''
+        }
+    },
+
+    'kakao':{
+        'APP':{
+            'client_id':'ab143070c987ae072f64e7796aa6622a',
+            'secret':'oEMteera7gGjo8No8Ix7XqM5CRnjvqqc',
+        }
+
+    }
+}
+
+LOGIN_REDIRECT_URL = ''#로그인 후 연결될 url
+ACCOUNT_LOGOUT_REDIRECT_URL = 'user' #logout후 연결 url
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -60,6 +113,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    
 ]
 
 #cors 설정

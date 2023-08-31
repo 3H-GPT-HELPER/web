@@ -1,125 +1,79 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Sign Up</title>
-  <style>
-    .footer {
-    background-color: #f2f2f2;
-    padding: 20px;
-    text-align: center;
-    max-width: 100%;
-  }
-  
-  .footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .logo {
-    height: 40px;
-  }
-  
-  .footer-buttons {
-    display: flex;
-  }
-  
-  .footer-button {
-    margin-right: 10px;
-    padding: 8px 12px;
-    background-color: #555555;
-    color: #ffffff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .footer-button:hover {
-    background-color: #333333;
-  }
-    body {
-      background-color: #f1f1f1;
-      font-family: Arial, sans-serif;
-    }
-
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .form-group input[type="email"],
-    .form-group input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
-
-    .form-group input[type="submit"] {
-      width: 100%;
-      padding: 10px;
-      background-color: #555555;
-      color: #ffffff;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-
-    .form-group input[type="submit"]:hover {
-      background-color: #333333;
-    }
-  </style>
+    <meta charset="utf-8" />
+    <title>Sign Up</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'js/homepage.css' %}"></script>
 </head>
-<body>
-    
-    <footer class="footer">
-        <div class="footer-container">
-          <img src="{% static 'img/ThreeH.png' %}" alt="Logo" class="logo">
-          <div class="footer-buttons">
-            <button class="footer-button">Menu</button>
-            <button class="footer-button">Log In</button>
-            <button class="footer-button">Sign Up</button>
-            <button class="footer-button">About Us</button>
-            <button class="footer-button">Contact Us</button>
-          </div>
-        </div>
-      </footer>
 
-  <div class="container">
-    <h2>Sign Up</h2>
-    <form>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Enter your email">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password">
-      </div>
-      <div class="form-group">
-        <input type="submit" value="Sign Up">
-      </div>
-    </form>
-  </div>
+<body>
+    <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+    role="banner" class="navigation w-nav">
+    <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}" width="65" alt="" class="logo-image" /></a>
+    </div>
+    </div>
+
+    <div class="w-users-userformpagewrap">
+        <div class="w-users-usersignupformwrapper">
+            <div tabindex="-1" class="w-users-userformsuccessstate w-form-success">
+                <div class="w-users-userformheader"><img
+                        src="https://uploads-ssl.webflow.com/img/thumbs-up-72.cbcaec93bc.svg" loading="lazy" alt="" />
+                    <h2>Account activated</h2>
+                </div>
+                <p>Your account was created successfully. You will be redirected shortly.</p>
+                <div data-wf-user-form-redirect=""><a href="/" class="w-inline-block">If nothing happens, click
+                        here.</a></div>
+            </div>
+            <form method="post" data-wf-user-form-type="signup">
+                <div class="w-users-userformheader">
+                    <h2>Sign up</h2>
+                </div><label for="Email">Email</label><input type="email" maxlength="256" placeholder="" name="Email"
+                    id="wf-sign-up-email" class="w-input" autoComplete="username" required=""
+                    data-wf-user-form-input-type="email" /><label for="Name">Name</label><input type="text"
+                    class="w-input" maxlength="256" name="" data-name="" data-wf-user-field="wf-user-field-name"
+                    placeholder="" fieldType="data-wf-user-field-type" id="wf-sign-up-name" required="" /><label
+                    for="Password">Password</label><input type="password" data-name="" maxlength="256" placeholder=""
+                    name="Password" id="wf-sign-up-password" class="w-input" required=""
+                    data-wf-user-form-input-type="password" /><label class="w-checkbox"><input type="checkbox"
+                        class="w-checkbox-input" name="" data-name="" data-wf-user-field="wf-user-field-accept-privacy"
+                        placeholder="" id="wf-sign-up-accept-privacy" required="" /><span class="w-form-label">By
+                        creating an account, I agree to this website&#x27;s <a href="#" class="w-inline-block">privacy
+                            policy</a> and <a href="#" class="w-inline-block">terms of service</a></span></label><label
+                    class="w-checkbox"><input type="checkbox" class="w-checkbox-input" name="" data-name=""
+                        data-wf-user-field="wf-user-field-accept-communications" placeholder=""
+                        id="wf-sign-up-accept-communications" required="" /><span class="w-form-label">I consent to
+                        receive marketing emails.</span></label><input type="submit" value="Sign Up"
+                    data-wait="Please wait..." class="w-users-userformbutton submit-button w-button" />
+                <div class="w-users-userformfooter"><span>Already have an account?</span><a href="/login"
+                        class="w-inline-block">Log In</a></div>
+            </form>
+            <div style="display:none" data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
+                <div class="user-form-error-msg"
+                    wf-signup-form-general-error-error="There was an error signing you up. Please try again, or contact us if you continue to have problems."
+                    wf-signup-form-not-allowed-error="You&#x27;re not allowed to access this site, please contact the admin for support."
+                    wf-signup-form-invalid-email-error="Make sure your email exists and is properly formatted (e.g., user@domain.com)."
+                    wf-signup-form-email-already_exist-error="An account with this email address already exists. Log in or reset your password."
+                    wf-signup-form-use-invite_email-error="Use the same email address your invitation was sent to."
+                    wf-signup-form-invalid-password-error="Your password must be at least 8 characters."
+                    wf-signup-form-not-verified-error="We couldn&#x27;t verify your account. Please try again, or contact us if you continue to have problems."
+                    wf-signup-form-expired-token-error="This link has expired. A new link has been sent to your email. Please try again, or contact us if you continue to have problems."
+                    wf-signup-form-validation-failed-error="There was an error in some of the information provided.">
+                    There was an error signing you up. Please try again, or contact us if you continue to have problems.
+                </div>
+            </div>
+            <div tabindex="-1" class="w-users-usersignupverificationmessage w-form-verification"
+                data-wf-user-form-verification="true">
+                <div class="w-users-userformheader">
+                    <img src="https://uploads-ssl.webflow.com/img/email-72.67fa6be437.svg" loading="lazy" alt="" />
+                    <h2>Verification Required</h2>
+                </div>
+                <p>Account verification required. Please check your email to find your unique verification link.</p>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
