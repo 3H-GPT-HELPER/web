@@ -1,0 +1,165 @@
+/* Footer */
+.footer {
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 40px;
+  }
+  
+  .footer-buttons {
+    display: flex;
+  }
+  
+  .footer-button {
+    margin-right: 10px;
+    padding: 8px 12px;
+    background-color: #555555;
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .footer-button:hover {
+    background-color: #333333;
+  }
+
+  /*Introducing chatGPT Helper*/
+    
+  .gray-box {
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: left;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  
+  .gray-box-content {
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .gray-box h2 {
+    font-size: 90px;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 50%;
+  }
+  
+  .gray-box p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 50%;
+  }
+  
+  .try-button {
+    background-color: #555555;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .try-button:hover {
+    background-color: #333333;
+  }
+
+  /*Sponsor Section*/
+
+  .sponsor-section {
+    background-color: #ffffff;
+    padding: 20px;
+  }
+  
+  .sponsor-buttons {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .sponsor-buttons button {
+    background-color: #ffffff;
+    color: #333333;
+    padding: 8px 16px;
+    border: 1px solid #333333;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .sponsor-buttons button:hover {
+    background-color: #333333;
+    color: #ffffff;
+  }
+
+  /* Contact Us */
+
+
+.gray-box {
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+.gray-box-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+}
+
+.logo-row img {
+  width: 200px; /* Adjust the width as needed */
+  height: auto;
+  margin-right: 10px; /* Add some spacing between the logos */
+}
+
+.contact-form {
+  width: 50%; /* Adjust the width as needed */
+}
+
+.contact-form h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.contact-form form input,
+.contact-form form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.contact-form form textarea {
+  height: 100px;
+}
+
+.contact-form form button {
+  background-color: #333333;
+  color: #ffffff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.contact-form form button:hover {
+  background-color: #555555;
+}
+
