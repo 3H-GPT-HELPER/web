@@ -24,12 +24,16 @@ import pandas as pd
 nltk.download('punkt')
 nltk.download('stopwords')
 
-from konlpy.tag import Okt
+#from konlpy.tag import Okt
 
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 
+import numpy as np
+import sys
+#sys.path.append('/Users/hgy/Desktop/hgy/EWHA/2023_1(4)/Final_project/3H/main')
+from .cal_similarity import cal_similarity
 from django.contrib.auth.models import User
 
 
@@ -38,7 +42,6 @@ def index(request):
 
     for user in users:
         print(user.email)
-
     return render(request,'main/index.html')
 
 def signup(request):
@@ -80,7 +83,7 @@ def category_detail(request,category_id):
 
     return render(request,'main/detail.html',context=context)
 
-
+ 
 @csrf_exempt
 def proxy(request):
     if request.method == 'POST':    
@@ -98,13 +101,17 @@ def proxy(request):
             #content entity 생성 
             content=Content(answer=fullanswer_str)
 
-            topics = extract_topic(answer_str)
-
-            topic_arr = topics.split("/")
-            content.topics = topics
-
-            category=get_category(topic_arr)
-            print(category)
+            return_dic = cal_similarity(request, answer_str)
+            #기존 category에 쿼리 추가
+            if 'existed' in return_dic:
+                category = return_dic.get('existed')
+            #새로운 category 생성
+            elif 'new' in return_dic:
+                topics = extract_topic(answer_str)
+                topic_arr = topics.split("/")
+                content.topics = topics
+                category=get_category(topic_arr)
+                print(category)
 
             content.selected_category=category
 
@@ -116,7 +123,7 @@ def proxy(request):
         
         
         print("main으로 보내버려~")
-       
+
 
     return JsonResponse({'error': 'Invalid request method'})
 
@@ -127,8 +134,8 @@ def extract_topic(answer):
     #영어/한국어 구분 **
     if data['answer'].encode().isalpha():
         X, vectorizer = preprocessing_eng(data)
-    else:
-        X, vectorizer = preprocessing_kr(data)
+    #else:
+    #    X, vectorizer = preprocessing_kr(data)
     
     lda_model = LatentDirichletAllocation(n_components=1, learning_method='online', random_state=777, max_iter=3)
     lda_top = lda_model.fit_transform(X)
@@ -152,6 +159,7 @@ def preprocessing_eng(data):
     
     return X, vectorizer 
     
+'''
 def preprocessing_kr(data):
     okt = Okt()
     tokenized = data['answer'].apply(lambda x: [word for word in okt.nouns(x)]) #명사로만 **
@@ -164,7 +172,7 @@ def preprocessing_kr(data):
     X = vectorizer.fit_transform(context)
     
     return X, vectorizer
-    
+'''
     
 def get_topics(components, feature_names, n=3):
     topic = []
@@ -185,13 +193,12 @@ def get_topics(components, feature_names, n=3):
     return top_features
 
 #둘다 리스트로 보내서 돌려봐요,,
-def get_category(request,top_features):
+def get_category(top_features):
     selected_category=""
-    #userkeywords_set=UserCategory.objects.filter(user_id__name='hw')
-    userkeywords_set=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+    userkeywords_set=UserCategory.objects.filter(user_id__name='hw')
     uk_list=[]
     for k in userkeywords_set:
-        uk_list.append(k.inserted_category)
+        uk_list.append(k.name)
 
     print("???")
     print(top_features,uk_list)
