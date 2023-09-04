@@ -3,7 +3,7 @@
 import joblib
 #from .views import extract_topic
 from django.contrib.auth.models import User
-from user.models import UserCategory
+from user.models import UserCategory 
 
 model = joblib.load('/Users/hgy/Desktop/hgy/EWHA/2023_1(4)/Final_project/3H/main/promcse_model.pkl')
 #받은 쿼리와 기존의 토픽들 간 거리 비교
