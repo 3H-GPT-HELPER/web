@@ -13,7 +13,7 @@ from django.http.request import HttpRequest
 from .models import Content
 from user.models import UserCategory
 
-#pip install nltk, scikit-learn, pandas 필요
+#pip install nltk, scikit-learn, pandas, konlpy 필요
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -23,6 +23,8 @@ import pandas as pd
 
 nltk.download('punkt')
 nltk.download('stopwords')
+
+from konlpy.tag import Okt
 
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -121,13 +123,20 @@ def proxy(request):
     if request.method == 'POST':    
         try:
             data=json.loads(request.body.decode('utf-8'))
-            answer=data['data']
-            answer_str = ''.join(answer)
-            print(answer_str)
+            answer=data['pTagContents']
+            full_answer=data['complexContents']
             
+            answer_str = ''.join(answer) #text만 있는 답변
+            fullanswer_str = ''.join(full_answer) #코드까지 합쳐진 답변
+            
+            print(answer_str)
+            print(fullanswer_str)
+
             #content entity 생성 
-            content=Content(answer=answer_str)
-            topics = preprocessing(answer_str)
+            content=Content(answer=fullanswer_str)
+
+            topics = extract_topic(answer_str)
+
             topic_arr = topics.split("/")
             content.topics = topics
 
@@ -148,34 +157,50 @@ def proxy(request):
 
     return JsonResponse({'error': 'Invalid request method'})
 
-def preprocessing(answer):
-    #print(context['contents'])
-    
+def extract_topic(answer):    
     data = pd.DataFrame({'answer':[answer]})
-    #context = context['contents']
-    #print(context['contents'])
     data['answer'] = data.apply(lambda row: nltk.word_tokenize(row['answer']),axis=1)
-    print(data)
-    stop_words_list = stopwords.words('english')
+    
+    #영어/한국어 구분 **
+    if data['answer'].encode().isalpha():
+        X, vectorizer = preprocessing_eng(data)
+    else:
+        X, vectorizer = preprocessing_kr(data)
+    
+    lda_model = LatentDirichletAllocation(n_components=1, learning_method='online', random_state=777, max_iter=3)
+    lda_top = lda_model.fit_transform(X)
+    
+    topic = get_topics(lda_model.components_,vectorizer.get_feature_names_out())
+    topics= '/'.join(topic)
+    
+    return topics
+    
+    
+def preprocessing_eng(data):
     tokenized = data['answer'].apply(lambda x: [word for word in x if len(word) > 2])
     detokenized = []
     for i in range(len(data)):
         t = ' '.join(tokenized[i])
         detokenized.append(t)
     context = detokenized
+    #stop_words_list = stopwords.words('english')
     vectorizer = TfidfVectorizer(stop_words='english',max_features=10)
     X = vectorizer.fit_transform(context)
     
-    lda_model = LatentDirichletAllocation(n_components=1, learning_method='online', random_state=777, max_iter=3)
-    lda_top = lda_model.fit_transform(X)
+    return X, vectorizer 
     
-    topic = get_topics(lda_model.components_,vectorizer.get_feature_names_out())
-    #print('/'.join(topic))
-    topics= '/'.join(topic)
+def preprocessing_kr(data):
+    okt = Okt()
+    tokenized = data['answer'].apply(lambda x: [word for word in okt.nouns(x)]) #명사로만 **
+    detokenized = []
+    for i in range(len(data)):
+        t = ' '.join(tokenized[i])
+        detokenized.append(t)
+    context = detokenized
+    vectorizer = TfidfVectorizer(max_features=10)
+    X = vectorizer.fit_transform(context)
     
-    return topics
-    
-    
+    return X, vectorizer
     
     
 def get_topics(components, feature_names, n=3):
