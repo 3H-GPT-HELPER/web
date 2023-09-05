@@ -29,7 +29,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 
 from django.contrib.auth.models import User
-
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     users = User.objects.all()
@@ -40,10 +41,46 @@ def index(request):
     return render(request,'main/index.html')
 
 def signup(request):
+
+    if request.method == "POST":
+        email = request.POST['Email']
+        name = request.POST['Name']
+        password = request.POST['Password']
+
+        myuser = User.objects.create_user(email, name, password)
+        # myuser.name = name
+        
+        myuser.save()
+
+        messages.success(request, "Your account has been successfully created.")
+
+        return redirect('login')
+
     return render(request,"main/signup.html")
 
 def login(request):
+
+    if request.method=="POST":
+            email = request.POST['Email']
+            password = request.POST['Password']
+
+            user = authenticate(email=email, password=password)
+
+            if user is not None:
+                login(request, user)
+                # name = user.name
+                return render(request, 'main/index.html') # , {'name': Name}
+
+            else:
+                messages.error(request, "Bad Credentials!")
+                return redirect(index)
+
     return render(request, 'main/login.html')
+
+def signout (request):
+    logout(request)
+    messages.success(request, "Logged out succesfully!")
+    return redirect(index)
 
 def about(request):
     return render(request, 'main/about.html')

@@ -127,7 +127,7 @@ ROOT_URLCONF = "chatGPT_helper.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [r"main\templates\main"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -139,6 +139,8 @@ TEMPLATES = [
         },
     },
 ]
+
+APPEND_SLASH=False
 
 WSGI_APPLICATION = "chatGPT_helper.wsgi.application"
 
