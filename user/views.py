@@ -7,6 +7,7 @@ from django.template import loader
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.backends import ModelBackend
+from django.views.decorators.csrf import csrf_exempt
 
 
 #kakao login(나중에 settings.py나 secrets.json으로 옮기기)
@@ -25,6 +26,33 @@ def index(request):
 
     print(context['check'])
     return render(request,'user/kakao_index.html',context)
+
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            auth_login(request, form.get_user())
+
+        return redirect('user:login_success')
+    else:
+
+        form = AuthenticationForm()
+
+    context = {
+        'form': form
+
+    }
+
+    return render(request, 'user/login.html', context)
+
+def loginSuccess(request):
+    return render(request,"login_success.html")
+
+def logout(request):
+    return render(request,'user/logout_success.html')
 
 def kakaoLogin(request):
     url=f'https://kauth.kakao.com/oauth/authorize?client_id={restApiKey}&redirect_uri={redirectUrl}&response_type=code'

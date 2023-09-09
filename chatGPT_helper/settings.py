@@ -48,20 +48,17 @@ INSTALLED_APPS = [
     "main",
     'user',
     'corsheaders',
-
-
-    # google login
-    'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',
-
+    
     #kakao login
     'allauth.socialaccount.providers.kakao',
 ]
 
 LOGIN_URL='account_login'
+
+AUTH_USER_MODEL = 'user.User'	# [app].[모델명]
+
 
 SITE_ID=4
 
@@ -100,7 +97,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-LOGIN_REDIRECT_URL = ''#로그인 후 연결될 url
+LOGIN_REDIRECT_URL = '/'#로그인 후 연결될 url
 ACCOUNT_LOGOUT_REDIRECT_URL = 'user' #logout후 연결 url
 
 MIDDLEWARE = [

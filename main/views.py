@@ -38,17 +38,67 @@ from django.contrib.auth.models import User
 
 
 def index(request):
-    users = User.objects.all()
+    # users = User.objects.all()
 
-    for user in users:
-        print(user.email)
+    # for user in users:
+    #     print(user.email)
     return render(request,'main/index.html')
 
+@csrf_exempt
 def signup(request):
+    if request.method=='POST':
+        username = request.POST.get('user_name')
+        userEmail=request.POST.get('email')
+        password = request.POST.get('password')
+
+        print("?",username,userEmail,password)
+        user=User(username=username,
+                #emailaddresss=userEmail,
+                #user_id=kakao_id,
+                password=password)
+        
+        user2=User(username="testhw",
+                   email="test@test.com",
+                   password="test")
+
+        
+        user2.save()
+
+        return redirect('/')
+
     return render(request,"main/signup.html")
 
+
+# def login(request):
+#     return render(request, 'main/login2.html')
+
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+@csrf_exempt
 def login(request):
-    return render(request, 'main/login.html')
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            auth_login(request, form.get_user())
+
+            return redirect('user:login_success')
+    else:
+
+        form = AuthenticationForm()
+
+    context = {
+        'form': form
+
+    }
+
+    return render(request, 'main/login2.html', context)
+
+from django.contrib.auth import logout as auth_logout
+def logout(request):
+    auth_logout(request)
+
+    return render(request,'user/logout_success.html')
 
 def about(request):
     return render(request, 'main/about.html')
@@ -102,6 +152,8 @@ def proxy(request):
             content=Content(answer=fullanswer_str)
 
             return_dic = cal_similarity(request, answer_str)
+            print("return_dic",return_dic)
+
             #기존 category에 쿼리 추가
             if 'existed' in return_dic:
                 category = return_dic.get('existed')

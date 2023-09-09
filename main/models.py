@@ -11,6 +11,3 @@ class Content(models.Model):
     inserted_category=models.ForeignKey(UserCategory,on_delete=models.SET_NULL, null=True)
     selected_category=models.CharField(max_length=32,null=True)
     
-    #userName=models.CharField(max_length=20,default="hw")
-    #category=models.CharField(max_length=20,default="")
-    

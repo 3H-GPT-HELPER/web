@@ -1,0 +1,56 @@
+<form action="" method="POST">
+    <!--action부분에 백엔드 url삽입-->
+    {% csrf_token %}
+    <div class="id_box">
+        <p class="box_name">아이디</p>
+        <input class="shadow" type="text" name="username" />
+        <!--{{ form.username }}-->
+        <!-- <button id="isonlyid" type="button" onclick="" data-bs-toggle="modal" data-bs-target="#wrong_idform">아이디 중복</br> 확인</button> -->
+        <span class="id_explain">6자이상 20자 이하의 영문,숫자만 가능</span>
+    </div>
+
+    <div class="pw1_box">
+        <p class="box_name">비밀번호</p>
+        <input class="shadow" type="password" name="password1" />
+        <!--{{ form.password1 }}-->
+        <span class="pw1_explain">8자 이상 15자 이하의 영문,숫자만 가능</span>
+    </div>
+
+    <div class="pw2_box">
+        <p class="box_name">비밀번호 확인</p>
+        <input class="shadow" type="password" name="password2" />
+        <!--{{ form.password2 }}-->
+        <!-- <span class="pw2_explain">비밀번호가 일치합니다</span> -->
+        <!--분기처리 필요 / 비밀번호 일치하면 위 내용을, 불일치면 '동일한 비밀번호를 입력해주세요' 출력-->
+    </div>
+
+    <div class="email_box">
+        <p class="box_name">이메일</p>
+        <!--{{ form.email_address }}-->
+        <input class="shadow" type="email" name="email_address" placeholder="nearbycafe@exmaple.com" />
+    </div>
+
+    <div class="username_box">
+        <p class="box_name">이름</p>
+        <!--{{ form.realname }}-->
+        <input class="shadow" type="text" name="realname" />
+    </div>
+
+    <!-- <div class="terms_box">
+        <p class="box_name"><input class="checkbox shadow" type="checkbox" name="agree1" /><span>NearbyCafe 이용약관 동의</span></p>
+        <textarea name="" id="" readonly="readonly" cols="60" rows="16">
+            NearbyCafe 이용약관 동의
+      </textarea
+        >
+    </div>
+
+    <div class="terms_box">
+        <p class="box_name"><input class="checkbox shadow" type="checkbox" name="agree2" /><span>개인정보 수집 및 이용 동의</span></p>
+        <textarea name="" id="" readonly="readonly" cols="60" rows="16">
+            개인정보 수집 및 이용 동의
+      </textarea
+        >
+    </div> -->
+
+    <button id="signup_btn" type="submit" onclick="" data-bs-toggle="modal" data-bs-target="#howorder">다음</button>
+</form>

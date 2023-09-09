@@ -5,7 +5,7 @@ import joblib
 from django.contrib.auth.models import User
 from user.models import UserCategory 
 
-model = joblib.load('/Users/hgy/Desktop/hgy/EWHA/2023_1(4)/Final_project/3H/main/promcse_model.pkl')
+model = joblib.load('/Users/ohbom/Downloads/promcse_model.pkl')
 #받은 쿼리와 기존의 토픽들 간 거리 비교
 def cal_similarity(request, answer_str):
     THRESHOLD = 0.5
