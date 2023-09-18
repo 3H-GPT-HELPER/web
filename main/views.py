@@ -40,12 +40,7 @@ from .cal_similarity import cal_similarity
 from django.contrib.auth.models import User
 
 
-def index(request):
-    # users = User.objects.all()
 
-    # for user in users:
-    #     print(user.email)
-    return render(request,'main/index.html')
 
 def signup(request: HttpRequest, *args, **kwargs):
     if request.method=='POST':
@@ -122,30 +117,35 @@ def main(request):
     userContents=Content.objects.filter(userName="hw")
     context={'contents':userContents}
     #preprocessing(userContents)
+
     
     return render(request, 'main/main.html',context=context)
 
 def category(request):
     #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
-    
+
+    print("!!!",request.user.username)
     context={'userCategories':userCategories}
    
     return render(request,"main/category.html",context=context)
 
 def category_detail(request,category_id):
+    print("!!!",request.user.username)
+    
 
     #category_id는 자동생성 및 전달되는 pk
     uc=UserCategory.objects.get(userCategory_id=category_id)
     
     uc_name=uc.inserted_category
     category_id=uc.userCategory_id
-    userContents=Content.objects.filter(inserted_category=uc_name)
+
+    print(uc_name,category_id)
+    userContents=Content.objects.filter(inserted_category__inserted_category=uc_name)
     context={'contents':userContents,'category_id':category_id}
 
     return render(request,'main/detail.html',context=context)
 
- 
 @csrf_exempt
 def proxy(request):
     if request.method == 'POST':    
@@ -153,34 +153,41 @@ def proxy(request):
             data=json.loads(request.body.decode('utf-8'))
             answer=data['pTagContents']
             full_answer=data['complexContents']
+
+            global fullanswer_str
             
             answer_str = ''.join(answer) #text만 있는 답변
             fullanswer_str = ''.join(full_answer) #코드까지 합쳐진 답변
+
+            print("?!",request.user.username)
+
+            new_request = HttpRequest()
+            new_request.method = 'GET'
+
+            #add_contents(new_request,fullanswer_str)
+           
+
+           #!!!
+           #저렇게 request를 인자로 보내주면 저게 proxy에서 사용했던 request라 제대로 작동이안됨...
+
             
-            #print(answer_str)
-            #print(fullanswer_str)
-
-            #content entity 생성 
-            content=Content(answer=fullanswer_str)
-            print("???",content.answer)
-
-            return_dic = cal_similarity(request, answer_str)
-            print("return_dic",return_dic)
+            # return_dic = cal_similarity(request, answer_str)
+            # print("return_dic",return_dic)
 
             #기존 category에 쿼리 추가
-            if 'existed' in return_dic:
-                category = return_dic.get('existed')
-            #새로운 category 생성
-            elif 'new' in return_dic:
-                topics = extract_topic(answer_str)
-                topic_arr = topics.split("/")
-                content.topics = topics
-                category=get_category(topic_arr)
-                print(category)
+            # if 'existed' in return_dic:
+            #     category = return_dic.get('existed')
+            # #새로운 category 생성
+            # elif 'new' in return_dic:
+            #     topics = extract_topic(answer_str)
+            #     topic_arr = topics.split("/")
+            #     content.topics = topics
+            #     category=get_category(topic_arr)
+            #     print(category)
 
-            content.selected_category=category
+            # content.selected_category=category
 
-            content.save()
+            #content.save()
             
 
         except json.JSONDecodeError:
@@ -191,6 +198,38 @@ def proxy(request):
 
 
     return JsonResponse({'error': 'Invalid request method'})
+
+def index(request):
+    # users = User.objects.all()
+
+    # for user in users:
+    #     print(user.email)
+    print("user test1:",request.user.username)
+    
+    
+    add_contents(request,fullanswer_str)
+    return render(request,'main/index.html')
+
+def add_contents(request,fullanswer_str):
+    print("user test:",request.user.username)
+
+    #근영이 category추출 코드 여기에 연결해서 uc에는 userCategory(uc) 객체 받기
+    #already exits->기존꺼 filter해서 uc에 담기, 없으면 새 UserCategory객체 생성 후 uc에 담기
+    uc=UserCategory.objects.get(inserted_category="digital_forensic")
+    
+    #content entity 생성 
+    content=Content(answer=fullanswer_str,
+                    user_id=request.user,
+                    topics="test",
+                    inserted_category=uc)
+                   
+    
+    content.save()
+
+    return
+            
+
+
 
 def extract_topic(answer):    
     data = pd.DataFrame({'answer':[answer]})

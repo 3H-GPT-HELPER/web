@@ -10,8 +10,9 @@ model = joblib.load('/Users/ohbom/Downloads/promcse_model.pkl')
 def cal_similarity(request, answer_str):
     THRESHOLD = 0.5
     #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+    print(request.user.username)
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
-    
+    print("근영 테스트",userCategories)
     scores = [] #dictionary
     model.build_index(userCategories, use_faiss=False)
     results = model.search(answer_str)
