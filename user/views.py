@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 import requests
 import json
-from .models import User
+from django.contrib import auth
+
+from .models import Users
 from django.template import loader
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate,login
@@ -32,21 +34,59 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            auth_login(request, form.get_user())
+        username=request.POST.get('username')
+        userEmail=request.POST.get('userEmail')
+        userpassword=request.POST.get('password')
 
-        return redirect('user:login_success')
+        print(username,userEmail,userpassword)
+
+        user = auth.authenticate(
+            request, username=username, password=userpassword,email=userEmail)
+        
+        ##
+        # from django.contrib.auth.hashers import check_password
+
+        # user = Users.objects.get(username=username)
+        # entered_password =userpassword
+
+        # if check_password(entered_password, user.password):
+        #    print("pw success")
+        # else:print('pw failed')
+
+        ##
+        
+        if user is not None:
+            auth.login(request,user)
+            print("login success")
+    
+            return render(request,"user/login_success.html")
+
+        else:
+            print("try again")
+            return render(request, 'user/login.html')
+        # context = {
+        #     "recent_login_id": request.session.get('login_session'),
+        #     "isidstorage": request.session.get('isidstorage')
+        # }
+        
+    #     form = AuthenticationForm(request, request.POST)
+    #     if form.is_valid():
+    #         auth_login(request, form.get_user())
+
+    #     return redirect('user:login_success')
+    # else:
+
+    #     form = AuthenticationForm()
+
+    # context = {
+    #     'form': form
+
+    # }
+
     else:
+        #return render(request, 'user/login.html', context)
+        return render(request, 'user/login.html')
 
-        form = AuthenticationForm()
-
-    context = {
-        'form': form
-
-    }
-
-    return render(request, 'user/login.html', context)
 
 def loginSuccess(request):
     return render(request,"login_success.html")
@@ -99,8 +139,8 @@ def kakaoLoginRedirect(request):
     # print(info,kakao_id)
 
     try:
-        test=User.objects.get(user_id=kakao_id)
-    except User.DoesNotExist:
+        test=Users.objects.get(user_id=kakao_id)
+    except Users.DoesNotExist:
         test=None
 
     print(test)
@@ -129,7 +169,7 @@ def kakaoLoginRedirect(request):
         # print(nickname,email,kakao_id)
 
         print("!!!!")
-        user=User(
+        user=Users(
             name=nickname,
             email_address=email,
             user_id=kakao_id,

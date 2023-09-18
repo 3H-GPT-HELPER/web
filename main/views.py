@@ -2,6 +2,9 @@ from django.shortcuts import render,redirect,reverse
 from django.http import JsonResponse
 from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from django.middleware.csrf import get_token
+from httpx import Auth
+from .forms import SignupForm
+
 
 
 from django.http import JsonResponse
@@ -11,7 +14,7 @@ import json
 from django.http.request import HttpRequest
 
 from .models import Content
-from user.models import UserCategory
+from user.models import UserCategory,Users
 
 #pip install nltk, scikit-learn, pandas, konlpy 필요
 import nltk
@@ -44,29 +47,36 @@ def index(request):
     #     print(user.email)
     return render(request,'main/index.html')
 
-@csrf_exempt
-def signup(request):
+def signup(request: HttpRequest, *args, **kwargs):
     if request.method=='POST':
-        username = request.POST.get('user_name')
+        form = SignupForm(request.POST)
+
+        username = request.POST.get('username')
         userEmail=request.POST.get('email')
-        password = request.POST.get('password')
+        password = request.POST.get('password2')
 
-        print("?",username,userEmail,password)
-        user=User(username=username,
-                #emailaddresss=userEmail,
-                #user_id=kakao_id,
-                password=password)
-        
-        user2=User(username="testhw",
-                   email="test@test.com",
-                   password="test")
+        print(username,userEmail,password)
 
+        user2=Users(username=username,
+                        email=userEmail,
+                        password=password)
         
         user2.save()
 
-        return redirect('/')
+        if form.is_valid():
+            user=form.save()
+            user2=Users(username=username,
+                        email=userEmail,
+                        password=password)
+            user.save()
+            user2.save()
 
-    return render(request,"main/signup.html")
+            #auth_login(request,user)
+            return redirect('/')
+    
+    else:
+        form=SignupForm()
+    return render(request,"main/signup2.html",{"form":form})
 
 
 # def login(request):
@@ -116,7 +126,9 @@ def main(request):
     return render(request, 'main/main.html',context=context)
 
 def category(request):
-    userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+    #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+    userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
+    
     context={'userCategories':userCategories}
    
     return render(request,"main/category.html",context=context)
@@ -145,11 +157,12 @@ def proxy(request):
             answer_str = ''.join(answer) #text만 있는 답변
             fullanswer_str = ''.join(full_answer) #코드까지 합쳐진 답변
             
-            print(answer_str)
-            print(fullanswer_str)
+            #print(answer_str)
+            #print(fullanswer_str)
 
             #content entity 생성 
             content=Content(answer=fullanswer_str)
+            print("???",content.answer)
 
             return_dic = cal_similarity(request, answer_str)
             print("return_dic",return_dic)

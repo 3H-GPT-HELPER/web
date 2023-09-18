@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 
 LOGIN_URL='account_login'
 
-AUTH_USER_MODEL = 'user.User'	# [app].[모델명]
+AUTH_USER_MODEL = 'user.Users'	# [app].[모델명]
 
 
 SITE_ID=4

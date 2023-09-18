@@ -9,7 +9,9 @@ model = joblib.load('/Users/ohbom/Downloads/promcse_model.pkl')
 #받은 쿼리와 기존의 토픽들 간 거리 비교
 def cal_similarity(request, answer_str):
     THRESHOLD = 0.5
-    userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+    #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+    userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
+    
     scores = [] #dictionary
     model.build_index(userCategories, use_faiss=False)
     results = model.search(answer_str)

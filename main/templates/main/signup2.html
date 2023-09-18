@@ -2,7 +2,7 @@
     <!--action부분에 백엔드 url삽입-->
     {% csrf_token %}
     <div class="id_box">
-        <p class="box_name">아이디</p>
+        <p class="box_name">유저이름</p>
         <input class="shadow" type="text" name="username" />
         <!--{{ form.username }}-->
         <!-- <button id="isonlyid" type="button" onclick="" data-bs-toggle="modal" data-bs-target="#wrong_idform">아이디 중복</br> 확인</button> -->
@@ -27,14 +27,9 @@
     <div class="email_box">
         <p class="box_name">이메일</p>
         <!--{{ form.email_address }}-->
-        <input class="shadow" type="email" name="email_address" placeholder="nearbycafe@exmaple.com" />
+        <input class="shadow" type="email" name="email" placeholder="chatGptHelper@exmaple.com" />
     </div>
 
-    <div class="username_box">
-        <p class="box_name">이름</p>
-        <!--{{ form.realname }}-->
-        <input class="shadow" type="text" name="realname" />
-    </div>
 
     <!-- <div class="terms_box">
         <p class="box_name"><input class="checkbox shadow" type="checkbox" name="agree1" /><span>NearbyCafe 이용약관 동의</span></p>
@@ -52,5 +47,5 @@
         >
     </div> -->
 
-    <button id="signup_btn" type="submit" onclick="" data-bs-toggle="modal" data-bs-target="#howorder">다음</button>
+    <button id="signup_btn" type="submit" onclick="" ref="/" data-bs-toggle="modal" data-bs-target="#howorder">다음</button>
 </form>
