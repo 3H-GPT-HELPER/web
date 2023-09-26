@@ -4,18 +4,13 @@ from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from django.middleware.csrf import get_token
 from httpx import Auth
 from .forms import SignupForm
-
-
-
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
 from django.http.request import HttpRequest
-
 from .models import Content
 from user.models import UserCategory,Users
-
 #pip install nltk, scikit-learn, pandas, konlpy 필요
 import nltk
 from nltk.corpus import stopwords
@@ -39,8 +34,8 @@ import sys
 from .cal_similarity import cal_similarity
 from django.contrib.auth.models import User
 
-
-
+fullanswer_str=""
+answer_str=""
 
 def signup(request: HttpRequest, *args, **kwargs):
     if request.method=='POST':
@@ -155,23 +150,23 @@ def proxy(request):
             full_answer=data['complexContents']
 
             global fullanswer_str
+            global answer_str
             
             answer_str = ''.join(answer) #text만 있는 답변
-            fullanswer_str = ''.join(full_answer) #코드까지 합쳐진 답변
-
+            fullanswer_str='new'
+            fullanswer_str += ''.join(full_answer) #코드까지 합쳐진 답변
+            #request.session['received_data'] = fullanswer_str
             print("?!",request.user.username)
 
-            new_request = HttpRequest()
-            new_request.method = 'GET'
+            # new_request = HttpRequest()
+            # new_request.method = 'GET'
 
             #add_contents(new_request,fullanswer_str)
            
 
            #!!!
            #저렇게 request를 인자로 보내주면 저게 proxy에서 사용했던 request라 제대로 작동이안됨...
-
-            
-            # return_dic = cal_similarity(request, answer_str)
+            #return_dic = cal_similarity(request, answer_str)
             # print("return_dic",return_dic)
 
             #기존 category에 쿼리 추가
@@ -188,14 +183,12 @@ def proxy(request):
             # content.selected_category=category
 
             #content.save()
-            
 
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')
         
         
         print("main으로 보내버려~")
-
 
     return JsonResponse({'error': 'Invalid request method'})
 
@@ -205,12 +198,39 @@ def index(request):
     # for user in users:
     #     print(user.email)
     print("user test1:",request.user.username)
-    
-    
-    add_contents(request,fullanswer_str)
+
+    global fullanswer_str
+    global answer_str
+
+    print(fullanswer_str)
+
+    if fullanswer_str[0:3]=='new':
+        fullanswer_str=fullanswer_str[3:]
+        add_contents(request,fullanswer_str)
+        
+        return_dic = cal_similarity(request, answer_str)
+        print(return_dic)
+            # print("return_dic",return_dic)
+
+            #기존 category에 쿼리 추가
+            # if 'existed' in return_dic:
+            #     category = return_dic.get('existed')
+            # #새로운 category 생성
+            # elif 'new' in return_dic:
+            #     topics = extract_topic(answer_str)
+            #     topic_arr = topics.split("/")
+            #     content.topics = topics
+            #     category=get_category(topic_arr)
+            #     print(category)
+
+            # content.selected_category=category
+
+            #content.save()
+
     return render(request,'main/index.html')
 
 def add_contents(request,fullanswer_str):
+    
     print("user test:",request.user.username)
 
     #근영이 category추출 코드 여기에 연결해서 uc에는 userCategory(uc) 객체 받기

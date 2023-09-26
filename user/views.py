@@ -40,6 +40,7 @@ def login(request):
 
         print(username,userEmail,userpassword)
 
+        #huda 해결해야하는 부분
         user = auth.authenticate(
             request, username=username, password=userpassword,email=userEmail)
         
