@@ -198,9 +198,6 @@ def index(request):
 def add_contents(request,fullanswer_str):
     
     print("user test:",request.user.username)
-
-    #근영이 category추출 코드 여기에 연결해서 uc에는 userCategory(uc) 객체 받기
-    #already exits->기존꺼 filter해서 uc에 담기, 없으면 새 UserCategory객체 생성 후 uc에 담기
     
     uc = ""
     
@@ -209,16 +206,18 @@ def add_contents(request,fullanswer_str):
     
     if 'existed' in return_dic:
         category = return_dic.get('existed')
-        uc = category
-        #uc = UserCategory.objects.get(inserted_category=category)
+        uc = UserCategory.objects.get(inserted_category=category)
     elif 'new' in return_dic:
         topics = extract_topic(answer_str)
         topic_arr = topics.split("/")
-        content.topics = topics
-        category = get_category(topic_arr)
-        print(category)
-        uc = category
-        #uc = UserCategory.objects.get(inserted_category = category)
+        #content.topics = topics
+        #category = get_category(topic_arr) <- 이 부분 확인 필요
+        category = topic_arr[0]
+        print("category is ", category)
+        #user catergory id를 autofield로 만들면
+        uc = UserCategory(userCategory_id=10,inserted_category = category,user_id=request.user)
+        uc.save()
+        #uc = UserCategory.objects(inserted_category = category)
     else:
         print("no uc category")
     
@@ -234,15 +233,13 @@ def add_contents(request,fullanswer_str):
     return
             
 
-
-
 def extract_topic(answer):    
     data = pd.DataFrame({'answer':[answer]})
     data['answer'] = data.apply(lambda row: nltk.word_tokenize(row['answer']),axis=1)
     
     #영어/한국어 구분 **
-    if data['answer'].encode().isalpha():
-        X, vectorizer = preprocessing_eng(data)
+    #if data['answer'].encode().isalpha():
+    X, vectorizer = preprocessing_eng(data)
     #else:
     #    X, vectorizer = preprocessing_kr(data)
     
