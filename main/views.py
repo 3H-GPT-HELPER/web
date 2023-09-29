@@ -120,18 +120,18 @@ def category(request):
     #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
 
-    print("!!!",request.user.username)
+    print("category!!!",request.user.username) #잘 나옴
     context={'userCategories':userCategories}
    
     return render(request,"main/category.html",context=context)
 
 def category_detail(request,category_id):
-    print("!!!",request.user.username)
+    print("category_detail!!!",request.user.username) #잘 나옴
     
 
     #category_id는 자동생성 및 전달되는 pk
     uc=UserCategory.objects.get(userCategory_id=category_id)
-    
+    print('uc: ', uc.inserted_category)
     uc_name=uc.inserted_category
     category_id=uc.userCategory_id
 
@@ -157,32 +157,13 @@ def proxy(request):
             fullanswer_str += ''.join(full_answer) #코드까지 합쳐진 답변
             #request.session['received_data'] = fullanswer_str
             print("?!",request.user.username)
+            print("160answer_str: ", answer_str) #잘 나옴
 
             # new_request = HttpRequest()
             # new_request.method = 'GET'
 
             #add_contents(new_request,fullanswer_str)
            
-
-           #!!!
-           #저렇게 request를 인자로 보내주면 저게 proxy에서 사용했던 request라 제대로 작동이안됨...
-            #return_dic = cal_similarity(request, answer_str)
-            # print("return_dic",return_dic)
-
-            #기존 category에 쿼리 추가
-            # if 'existed' in return_dic:
-            #     category = return_dic.get('existed')
-            # #새로운 category 생성
-            # elif 'new' in return_dic:
-            #     topics = extract_topic(answer_str)
-            #     topic_arr = topics.split("/")
-            #     content.topics = topics
-            #     category=get_category(topic_arr)
-            #     print(category)
-
-            # content.selected_category=category
-
-            #content.save()
 
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')
@@ -202,30 +183,15 @@ def index(request):
     global fullanswer_str
     global answer_str
 
-    print(fullanswer_str)
+    print("206answer_str: ", answer_str)
 
     if fullanswer_str[0:3]=='new':
+        print("if fullanswer_str")
         fullanswer_str=fullanswer_str[3:]
         add_contents(request,fullanswer_str)
         
-        return_dic = cal_similarity(request, answer_str)
-        print(return_dic)
-            # print("return_dic",return_dic)
-
-            #기존 category에 쿼리 추가
-            # if 'existed' in return_dic:
-            #     category = return_dic.get('existed')
-            # #새로운 category 생성
-            # elif 'new' in return_dic:
-            #     topics = extract_topic(answer_str)
-            #     topic_arr = topics.split("/")
-            #     content.topics = topics
-            #     category=get_category(topic_arr)
-            #     print(category)
-
-            # content.selected_category=category
-
-            #content.save()
+        #return_dic = cal_similarity(request, answer_str) #??
+        #print(return_dic)
 
     return render(request,'main/index.html')
 
@@ -235,7 +201,26 @@ def add_contents(request,fullanswer_str):
 
     #근영이 category추출 코드 여기에 연결해서 uc에는 userCategory(uc) 객체 받기
     #already exits->기존꺼 filter해서 uc에 담기, 없으면 새 UserCategory객체 생성 후 uc에 담기
-    uc=UserCategory.objects.get(inserted_category="digital_forensic")
+    
+    uc = ""
+    
+    return_dic = cal_similarity(request,answer_str)
+    print(return_dic)
+    
+    if 'existed' in return_dic:
+        category = return_dic.get('existed')
+        uc = category
+        #uc = UserCategory.objects.get(inserted_category=category)
+    elif 'new' in return_dic:
+        topics = extract_topic(answer_str)
+        topic_arr = topics.split("/")
+        content.topics = topics
+        category = get_category(topic_arr)
+        print(category)
+        uc = category
+        #uc = UserCategory.objects.get(inserted_category = category)
+    else:
+        print("no uc category")
     
     #content entity 생성 
     content=Content(answer=fullanswer_str,
