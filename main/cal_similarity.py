@@ -7,7 +7,17 @@ import numpy as np
 from numpy import dot
 from numpy.linalg import norm
 
-model = joblib.load('/Users/hgy/Desktop/promcse_model.pkl')
+#model = joblib.load('/Users/hgy/Desktop/promcse_model.pkl')
+
+from promcse import PromCSE
+
+model_name_or_path = 'YuxinJiang/unsup-promcse-bert-base-uncased'
+pooler_type = 'cls_before_pooler'
+pre_seq_len = 16
+
+model = PromCSE(model_name_or_path=model_name_or_path, 
+          pooler_type=pooler_type,
+          pre_seq_len=pre_seq_len)
 
 def cos_similarity(a,b):
     return dot(a,b)/(norm(a)*norm(b))
@@ -15,7 +25,7 @@ def cos_similarity(a,b):
 
 #받은 쿼리와 기존의 토픽들 간 거리 비교
 def cal_similarity(request, answer_str):
-    THRESHOLD = 0.5
+    THRESHOLD = 0.8
     #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     print(request.user.username)
     categories = []
@@ -23,7 +33,6 @@ def cal_similarity(request, answer_str):
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
     for u in userCategories:
         categories.append(u.inserted_category)
-    #print("근영 테스트",userCategories)
     scores = [] #dictionary
     print("******")
     print("django usercategories list: ", categories)
@@ -52,8 +61,11 @@ def cal_similarity(request, answer_str):
     '''
     
     # 기존 category에 내용 추가
+    
+    print("max scores: ", max(scores))
+    
     if max(scores) >= THRESHOLD:
-        category = categories.index(max(scores))[0]
+        category = categories[scores.index(max(scores))]
         print("{existed':", category,"}")
         return {'existed': category}
     # 새로운 category 생성
