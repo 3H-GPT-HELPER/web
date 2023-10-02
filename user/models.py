@@ -11,7 +11,6 @@ class Users(AbstractUser):
     
     
 class UserCategory(models.Model):
-    userCategory_id=models.IntegerField()
     inserted_category=models.CharField(max_length=32)
     user_id=models.ForeignKey(Users,on_delete=models.SET_NULL, null=True)
 

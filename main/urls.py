@@ -14,7 +14,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('main/', views.main, name='main'),
     path('category/',views.category,name="category"),
-    path('category/<int:category_id>/',views.category_detail,name="detail_page"),
+    path('category/<int:pk>/',views.category_detail,name="detail_page"),
     path('proxy',views.proxy,name='proxy'),
 
 

@@ -125,15 +125,15 @@ def category(request):
    
     return render(request,"main/category.html",context=context)
 
-def category_detail(request,category_id):
+def category_detail(request,pk):
     print("category_detail!!!",request.user.username) #잘 나옴
-    
+    print("pk",pk)
 
     #category_id는 자동생성 및 전달되는 pk
-    uc=UserCategory.objects.get(userCategory_id=category_id)
+    uc=UserCategory.objects.get(id=pk)
     print('uc: ', uc.inserted_category)
     uc_name=uc.inserted_category
-    category_id=uc.userCategory_id
+    category_id=pk
 
     print(uc_name,category_id)
     userContents=Content.objects.filter(inserted_category__inserted_category=uc_name)
@@ -215,7 +215,7 @@ def add_contents(request,fullanswer_str):
         category = topic_arr[0]
         print("category is ", category)
         #user catergory id를 autofield로 만들면
-        uc = UserCategory(userCategory_id=10,inserted_category = category,user_id=request.user)
+        uc = UserCategory(inserted_category = category,user_id=request.user)
         uc.save()
         #uc = UserCategory.objects(inserted_category = category)
     else:
@@ -224,7 +224,7 @@ def add_contents(request,fullanswer_str):
     #content entity 생성 
     content=Content(answer=fullanswer_str,
                     user_id=request.user,
-                    topics="test",
+                    topics=topics,
                     inserted_category=uc)
                    
     
