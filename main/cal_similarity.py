@@ -7,6 +7,7 @@ from main.models import Content
 import numpy as np
 from numpy import dot
 from numpy.linalg import norm
+from .extract_topic import *
 
 #model = joblib.load('/Users/hgy/Desktop/promcse_model.pkl')
 
@@ -37,8 +38,8 @@ def cal_similarity(request, answer_str):
     for u in userCategories:
         categories.append(u.inserted_category)
         
-    for a in userAnswers:
-        answers.append(a.answer)
+    #for a in userAnswers:
+    #    answers.append(a.answer)
         
     scores = [] #dictionary
     print("******")
@@ -55,9 +56,18 @@ def cal_similarity(request, answer_str):
     #    score = model.similarity(answer_str,category)
     #    scores.append(score)
         
-    for answer in answers:
-        score = model.similarity(answer_str, answer)
-        scores.append(score)
+    #for answer in answers:
+    #    score = model.similarity(answer_str, answer)
+    #    scores.append(score)
+    
+    for a in userAnswers:
+        topics = extract_topic(a.answer)
+        topic_arr = topics.split("/")
+        score3 = []
+        for t in topic_arr:
+            score = model.similarity(answer_str,t)
+            score3.append(score)
+        scores.append(score3)
     
     '''
     model.build_index(userCategories, use_faiss=False)
@@ -73,11 +83,12 @@ def cal_similarity(request, answer_str):
     
     # 기존 category에 내용 추가
     
-    print("max scores: ", max(scores))
+    print("max scores: ", max(map(max,scores)))
     
-    if max(scores) >= THRESHOLD:
-        print(scores.index(max(scores)))
-        category = categories[scores.index(max(scores))]
+    if max(map(max,scores)) >= THRESHOLD:
+        #print(scores.index(max(scores)))
+        ij=[(i,j) for i in range(len(scores)) for j in range(len(scores[0])) if scores[i][j]==1]
+        category = userAnswers[ij[0]].inserted_category
         print("{existed':", category,"}")
         return {'existed': category}
     # 새로운 category 생성

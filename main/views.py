@@ -33,6 +33,7 @@ import sys
 #sys.path.append('/Users/hgy/Desktop/hgy/EWHA/2023_1(4)/Final_project/3H/main')
 from .cal_similarity import cal_similarity
 from django.contrib.auth.models import User
+from .extract_topic import *
 
 fullanswer_str=""
 answer_str=""
@@ -233,24 +234,6 @@ def add_contents(request,fullanswer_str):
 
     return
             
-
-def extract_topic(answer):    
-    data = pd.DataFrame({'answer':[answer]})
-    data['answer'] = data.apply(lambda row: nltk.word_tokenize(row['answer']),axis=1)
-    
-    #영어/한국어 구분 **
-    #if data['answer'].encode().isalpha():
-    X, vectorizer = preprocessing_eng(data)
-    #else:
-    #    X, vectorizer = preprocessing_kr(data)
-    
-    lda_model = LatentDirichletAllocation(n_components=1, learning_method='online', random_state=777, max_iter=3)
-    lda_top = lda_model.fit_transform(X)
-    
-    topic = get_topics(lda_model.components_,vectorizer.get_feature_names_out())
-    topics= '/'.join(topic)
-    
-    return topics
     
     
 def preprocessing_eng(data):
@@ -281,23 +264,6 @@ def preprocessing_kr(data):
     return X, vectorizer
 '''
     
-def get_topics(components, feature_names, n=3):
-    topic = []
-    
-    '''
-    for idx, topic in enumerate(components):
-        print("Topic %d:" % (idx+1),[(feature_names[i], topic[i].round(2)) for i in topic.argsort()[:-n - 1:-1]])
-        #for i in topic.argsort()[:-n - 1:-1] :
-            #print("Topic %d:" % (idx+1),[(feature_names[i], topic[i].round(2)) ])
-            #topic += feature_names[i]
-    '''
-    for idx, topic in enumerate(components):
-       # top_features = [(feature_names[i], topic[i].round(2)) for i in topic.argsort()[:-n - 1:-1]]
-       top_features = [feature_names[i] for i in topic.argsort()[:-n - 1:-1]]
-
-    print(top_features)
-        
-    return top_features
 
 #둘다 리스트로 보내서 돌려봐요,,
 def get_category(top_features):
