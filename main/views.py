@@ -3,6 +3,10 @@ from django.http import JsonResponse
 from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from django.middleware.csrf import get_token
 
+from django.contrib import auth
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -24,7 +28,7 @@ import pandas as pd
 nltk.download('punkt')
 nltk.download('stopwords')
 
-from konlpy.tag import Okt
+#from konlpy.tag import Okt
 
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -66,10 +70,10 @@ def login(request):
             email = request.POST['Email']
             password = request.POST['Password']
 
-            user = authenticate(email=email, password=password)
+            user = auth.authenticate(request,email=email, password=password)
 
             if user is not None:
-                login(request, user)
+                auth.login(request, user)
                 # name = user.name
                 return render(request, 'main/index.html') # , {'name': Name}
 
