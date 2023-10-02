@@ -215,6 +215,7 @@ def add_contents(request,fullanswer_str):
     if 'existed' in return_dic:
         category = return_dic.get('existed')
         uc = UserCategory.objects.get(inserted_category=category)
+        topics = extract_topic(answer_str)
     elif 'new' in return_dic:
         topics = extract_topic(answer_str)
         topic_arr = topics.split("/")
