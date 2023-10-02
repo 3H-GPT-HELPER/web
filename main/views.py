@@ -18,6 +18,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize 
 
 import pandas as pd
+from collections import deque
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -36,6 +37,8 @@ from django.contrib.auth.models import User
 
 fullanswer_str=""
 answer_str=""
+answer_list=[]
+answer_list=deque(answer_list)
 
 def signup(request: HttpRequest, *args, **kwargs):
     if request.method=='POST':
@@ -155,6 +158,8 @@ def proxy(request):
             answer_str = ''.join(answer) #text만 있는 답변
             fullanswer_str='new'
             fullanswer_str += ''.join(full_answer) #코드까지 합쳐진 답변
+
+            answer_list.append(fullanswer_str)
             #request.session['received_data'] = fullanswer_str
             print("?!",request.user.username)
             print("160answer_str: ", answer_str) #잘 나옴
@@ -184,15 +189,18 @@ def index(request):
     global answer_str
 
     print("206answer_str: ", answer_str)
+    
+    while answer_list:
+        fullanswer_str=answer_list.popleft()
+        if fullanswer_str[0:3]=='new':
+            print("if fullanswer_str")
+            fullanswer_str=fullanswer_str[3:]
+            add_contents(request,fullanswer_str)
+            
+            #return_dic = cal_similarity(request, answer_str) #??
+            #print(return_dic)
 
-    if fullanswer_str[0:3]=='new':
-        print("if fullanswer_str")
-        fullanswer_str=fullanswer_str[3:]
-        add_contents(request,fullanswer_str)
-        
-        #return_dic = cal_similarity(request, answer_str) #??
-        #print(return_dic)
-
+    
     return render(request,'main/index.html')
 
 def add_contents(request,fullanswer_str):
