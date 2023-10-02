@@ -1,36 +1,27 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
+
 <head>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/category.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
   <title>Category</title>
 </head>
+
 <body>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <button class="footer-buttons" onclick="location.href='/'">HOME</button>
-            <button class="footer-buttons">USER</button>
-            <button class="footer-buttons">ABOUT</button>
-            <button class="footer-buttons">CONTACT</button>
-      </footer>
+  <div class="container.cc-heading-wrap">
+    <h1 class="heading-5">Category</h1>
+  </div>pip in
 
-    <div class="category-container">
-        <div class="category">Category</div>
-    </div>pip in
-
-    <div class="category-topic">
-      {%for category in userCategories %}
-        <button class="topic-buttons" onclick="location.href='/category/{{category.userCategory_id}}'">{{category.inserted_category}}</button>
-      {%endfor%}
-        <!-- <button class="topic-buttons" onclick="location.href='/main'">Gandcrab<button>
-        <button class="topic-buttons">Database</button>
-        <button class="topic-buttons">Digital Forensic</button>
-        <button class="topic-buttons">Blockchain</button>
-        <button class="topic-buttons">Cryptography</button>  -->
-
-    </div>
+  <button class="w-dyn-list">
+    <div role="list" class="collection-list w-dyn-items"></div>
+    onclick="location.href='/category/{{category.userCategory_id}}'">{{category.inserted_category}}
+  </button>
+    {%endfor%}
+  
+  <img src="https://uploads-ssl.webflow.com/64a4af65db33c4133c120e71/64ad499279335744b7dc4a50_plus.png"
+    loading="lazy" width="17" alt="" />
 
 </body>
+
 </html>

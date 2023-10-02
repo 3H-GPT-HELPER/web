@@ -3160,7 +3160,7 @@ textarea.w-input, textarea.w-select {
 
 body {
   color: #1a1b1f;
-  background-color: #b4d7c4;
+  background-color: #fffff0;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: 400;
@@ -3766,7 +3766,7 @@ figcaption {
 .intro-header {
   height: 650px;
   color: #fff;
-  background-color: #b4d7c4;
+  background-color: #fffff0;
   justify-content: center;
   align-items: center;
   margin-bottom: 100px;
@@ -4450,13 +4450,17 @@ figcaption {
   font-family: Inconsolata, monospace;
 }
 
+.heading-5 {
+  color: #000;
+}
+
 .body-2 {
   margin-bottom: 0;
   padding-bottom: 140px;
 }
 
 .submit-button {
-  color: #b4d7c4;
+  color: #fffff0;
   object-fit: fill;
   background-color: #2e1a77;
 }
@@ -4634,6 +4638,24 @@ figcaption {
   .order-summary {
     flex-basis: 320px;
   }
+}
+
+.topic-buttons {
+  background-color: blanchedalmond;
+  color: black;
+  font-size: large;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  padding: 20px 60px;
+  margin: 30px;
+  border: none;
+  cursor: pointer;
+}
+
+.topic-buttons:hover {
+  background-color: black;
+  color:blanchedalmond;
+  font-variant: small-caps;
+  font-size: 40px;
 }
 
 @media screen and (max-width: 767px) {
