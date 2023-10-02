@@ -220,14 +220,22 @@ def add_contents(request,fullanswer_str):
     elif 'new' in return_dic:
         topics = extract_topic(answer_str)
         topic_arr = topics.split("/")
-        #content.topics = topics
         #category = get_category(topic_arr) <- 이 부분 확인 필요
         category = topic_arr[0]
         print("category is ", category)
-        #user catergory id를 autofield로 만들면
-        uc = UserCategory(inserted_category = category,user_id=request.user)
-        uc.save()
-        #uc = UserCategory.objects(inserted_category = category)
+        
+        try:
+            if UserCategory.objects.get(inserted_category=category,user_id=request.user) != None:
+                uc = UserCategory.objects.get(inserted_category = category,user_id=request.user)
+                print("try if")
+            else:
+                uc = UserCategory(inserted_category = category,user_id=request.user)
+                uc.save()
+                print("try else")
+        except:
+            uc = UserCategory(inserted_category = category,user_id=request.user)
+            uc.save()
+            print("except")
     else:
         print("no uc category")
     
