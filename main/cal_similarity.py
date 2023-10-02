@@ -3,6 +3,7 @@
 import joblib
 from django.contrib.auth.models import User
 from user.models import UserCategory 
+from main.models import Content
 import numpy as np
 from numpy import dot
 from numpy.linalg import norm
@@ -29,10 +30,16 @@ def cal_similarity(request, answer_str):
     #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     print(request.user.username)
     categories = []
+    answers = []
     #userCategories=UserCategory.objects.filter(user_id__username=request.user.username).values_list('inserted_category')
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
+    userAnswers = Content.objects.filter(user_id__username = request.user.username)
     for u in userCategories:
         categories.append(u.inserted_category)
+        
+    for a in userAnswers:
+        answers.append(a.answer)
+        
     scores = [] #dictionary
     print("******")
     print("django usercategories list: ", categories)
@@ -43,9 +50,13 @@ def cal_similarity(request, answer_str):
     if len(categories) == 0 :
         return {'new': answer_str}
     
-    for category in categories:
-        #category랑 answer_str 거리값 계산
-        score = model.similarity(answer_str,category)
+    #for category in categories:
+    #    #category랑 answer_str 거리값 계산
+    #    score = model.similarity(answer_str,category)
+    #    scores.append(score)
+        
+    for answer in answers:
+        score = model.similarity(answer_str, answer)
         scores.append(score)
     
     '''

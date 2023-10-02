@@ -133,7 +133,7 @@ def category_detail(request,pk):
     print("pk",pk)
 
     #category_id는 자동생성 및 전달되는 pk
-    uc=UserCategory.objects.get(id=pk)
+    uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
     print('uc: ', uc.inserted_category)
     uc_name=uc.inserted_category
     category_id=pk
