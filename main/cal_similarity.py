@@ -76,6 +76,7 @@ def cal_similarity(request, answer_str):
     print("max scores: ", max(scores))
     
     if max(scores) >= THRESHOLD:
+        print(scores.index(max(scores)))
         category = categories[scores.index(max(scores))]
         print("{existed':", category,"}")
         return {'existed': category}
