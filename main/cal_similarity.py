@@ -85,10 +85,13 @@ def cal_similarity(request, answer_str):
     
     print("max scores: ", max(map(max,scores)))
     
-    if max(map(max,scores)) >= THRESHOLD:
+    max_score = max(map(max,scores))
+    
+    if max_score >= THRESHOLD:
         #print(scores.index(max(scores)))
-        ij=[(i,j) for i in range(len(scores)) for j in range(len(scores[0])) if scores[i][j]==1]
-        category = userAnswers[ij[0]].inserted_category
+        ij=[(i,j) for i in range(len(scores)) for j in range(len(scores[0])) if scores[i][j]==max_score]
+        #print(ij)
+        category = categories[ij[0][0]]
         print("{existed':", category,"}")
         return {'existed': category}
     # 새로운 category 생성
