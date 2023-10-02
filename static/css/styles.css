@@ -1752,7 +1752,7 @@ textarea.w-input, textarea.w-select {
 
 .w-nav {
   z-index: 1000;
-  background: #ddd;
+  background: #fffff0;
   position: relative;
 }
 
@@ -2943,7 +2943,7 @@ html[data-w-dynpage] [data-w-cloak] {
 }
 
 .w-users-userformpagewrap {
-  height: 100vh;
+  height: 430px;
   max-width: 340px;
   flex-direction: column;
   justify-content: center;
@@ -3328,6 +3328,7 @@ figcaption {
   max-width: 1140px;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 10px;
 }
 
 .container.cc-subscription-form {
@@ -3372,10 +3373,10 @@ figcaption {
 
 .paragraph-bigger {
   opacity: 1;
-  color: #f96262;
-  margin-bottom: 10px;
+  color: #171342;
+  margin-bottom: 30px;
   font-family: Inconsolata, monospace;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 34px;
 }
@@ -3777,7 +3778,7 @@ figcaption {
 }
 
 .intro-header {
-  height: 650px;
+  height: 500px;
   color: #fff;
   background-color: #fffff0;
   justify-content: center;
@@ -4442,8 +4443,8 @@ figcaption {
 }
 
 .grid-2 {
-  grid-column-gap: 40px;
-  grid-row-gap: 40px;
+  grid-column-gap: 100px;
+  grid-row-gap: 10px;
   grid-template-columns: 1fr 1fr 1fr;
   margin-bottom: 60px;
 }
@@ -4509,7 +4510,7 @@ figcaption {
   }
 
   .navigation-items {
-    background-color: #fff;
+    background-color: #fffff0;
   }
 
   .cart {

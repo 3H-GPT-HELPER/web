@@ -100,6 +100,7 @@ def main(request):
     return render(request, 'main/main.html',context=context)
 
 def category(request):
+    print("user",request.user)
     userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     context={'userCategories':userCategories}
    
