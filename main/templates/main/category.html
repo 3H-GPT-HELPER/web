@@ -1,27 +1,49 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-  <title>Category</title>
+  <meta charset="utf-8" />
+    <title>About</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'js/homepage.css' %}"></script>
 </head>
 
 <body>
 
-  <div class="container.cc-heading-wrap">
-    <h1 class="heading-5">Category</h1>
+  <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+    role="banner" class="navigation w-nav">
+    <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}"
+          width="65" alt="" class="logo-image" /></a>
+    </div>
+  </div>
+
+  <div class="container cc-heading-wrap">
+    <div class="heading-5">Category</div>
   </div>pip in
 
-  <button class="w-dyn-list">
-    <div role="list" class="collection-list w-dyn-items"></div>
-    onclick="location.href='/category/{{category.userCategory_id}}'">{{category.inserted_category}}
-  </button>
+  <div class="w-dyn-list">
+    {%for category in userCategories %}
+    <button class="collection-list w-dyn-items"
+      onclick="location.href='/category/{{category.userCategory_id}}'">{{category.inserted_category}}</button>
     {%endfor%}
-  
-  <img src="https://uploads-ssl.webflow.com/64a4af65db33c4133c120e71/64ad499279335744b7dc4a50_plus.png"
-    loading="lazy" width="17" alt="" />
+  </div>
+
+  <input id="readInput">
+
+  <button src="{% static 'img/plus.png' %}" onclick="myText()"></button>/>
+
+  <p id="demo"></p>
+
+  <script>
+    function myText(){
+    var x = document.getElementById("myText").value;
+    document.getElementById("demo").innerHTML = x;}
+  </script>
 
 </body>
 
 </html>
+
+

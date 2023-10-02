@@ -1987,6 +1987,10 @@ textarea.w-input, textarea.w-select {
   }
 }
 
+html[data-w-dynpage] [data-w-cloak] {
+  color: rgba(0, 0, 0, 0) !important;
+}
+
 .w-dyn-empty {
   background-color: #ddd;
   padding: 10px;
@@ -3345,6 +3349,15 @@ figcaption {
 
 .container.cc-full-width-form-wrap {
   align-items: flex-start;
+  display: flex;
+}
+
+.category-topic {
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  margin-left: -15px;
+  margin-right: -15px;
   display: flex;
 }
 
