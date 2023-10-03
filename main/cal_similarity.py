@@ -48,7 +48,7 @@ def cal_similarity(request, answer_str):
     #categories = list(userCategories) #userCategories의 카테고리 값들만 들어있는 리스트
     
     #만약 비어 있으면 바로 리턴
-    if len(categories) == 0 :
+    if len(categories) == 0 or len(userAnswers) == 0:
         return {'new': answer_str}
     
     #for category in categories:
