@@ -2,6 +2,12 @@ from django.shortcuts import render,redirect,reverse
 from django.http import JsonResponse
 from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from django.middleware.csrf import get_token
+
+from django.contrib import auth
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+
+
 from httpx import Auth
 from .forms import SignupForm
 from django.http import JsonResponse
@@ -34,6 +40,35 @@ import sys
 #sys.path.append('/Users/hgy/Desktop/hgy/EWHA/2023_1(4)/Final_project/3H/main')
 from .cal_similarity import cal_similarity
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+
+def index(request):
+    users = User.objects.all()
+
+    for user in users:
+        print(user.email)
+
+    return render(request,'main/index.html')
+
+def signup(request):
+
+    if request.method == "POST":
+        email = request.POST['Email']
+        name = request.POST['Name']
+        password = request.POST['Password']
+
+        myuser = User.objects.create_user(email, name, password)
+        # myuser.name = name
+        
+        myuser.save()
+
+        messages.success(request, "Your account has been successfully created.")
+
+        return redirect('login')
+
+    return render(request,"main/signup.html")
+
 from .extract_topic import *
 
 fullanswer_str=""
@@ -81,28 +116,50 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 @csrf_exempt
 def login(request):
 
-    if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            auth_login(request, form.get_user())
+    if request.method=="POST":
+            email = request.POST['Email']
+            password = request.POST['Password']
 
-            return redirect('user:login_success')
-    else:
+            user = auth.authenticate(request,email=email, password=password)
 
-        form = AuthenticationForm()
+            if user is not None:
+                auth.login(request, user)
+                # name = user.name
+                return render(request, 'main/index.html') # , {'name': Name}
 
-    context = {
-        'form': form
+            else:
+                messages.error(request, "Bad Credentials!")
+                return redirect(index)
 
-    }
+    return render(request, 'main/login.html')
 
-    return render(request, 'main/login2.html', context)
+    # if request.method == 'POST':
+    #     form = AuthenticationForm(request, request.POST)
+    #     if form.is_valid():
+    #         auth_login(request, form.get_user())
+
+    #         return redirect('user:login_success')
+    # else:
+
+    #     form = AuthenticationForm()
+
+    # context = {
+    #     'form': form
+
+    # }
+
+    # return render(request, 'main/login2.html', context)
 
 from django.contrib.auth import logout as auth_logout
 def logout(request):
     auth_logout(request)
 
     return render(request,'user/logout_success.html')
+
+def signout (request):
+    logout(request)
+    messages.success(request, "Logged out succesfully!")
+    return redirect(index)
 
 def about(request):
     return render(request, 'main/about.html')

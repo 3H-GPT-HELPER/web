@@ -1,24 +1,17 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html>
+
 <head>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/category.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
   <title>Category</title>
 </head>
+
 <body>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <button class="footer-buttons" onclick="location.href='/'">HOME</button>
-            <button class="footer-buttons">USER</button>
-            <button class="footer-buttons">ABOUT</button>
-            <button class="footer-buttons">CONTACT</button>
-      </footer>
-
-    <div class="category-container">
-        <div class="category">Category</div>
-    </div>pip in
+  <div class="container.cc-heading-wrap">
+    <h1 class="heading-5">Category</h1>
+  </div>
 
     <div class="category-topic">
       {%for category in userCategories %}
@@ -33,4 +26,5 @@
     </div>
 
 </body>
+
 </html>

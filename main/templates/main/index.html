@@ -11,16 +11,36 @@
 </head>
 
 <body class="body-3">
+
     <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
         role="banner" class="navigation w-nav">
         <div class="navigation-items"><a href="/" aria-current="page" class="logo-link w-nav-brand w--current"><img src="static\img\logo.png" width="65" alt="" class="logo-image" /></a>
             <div class="navigation-wrap">
-                <nav role="navigation" class="navigation-items w-nav-menu">
+                <!-- <nav role="navigation" class="navigation-items w-nav-menu"> -->
+
+                    {% for message in messages %}
+                    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                    <strong>Message:</strong> {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close"></button>
+                    <span aria-hidden="true">&times;</span>
+                    </div>
+                    {% endfor %}
+
+                    {% if user.is_authenticated %}
+                    <h3>Hello {{name}}</h3>
+                    <h4>You're successfully logged in.</h4>
+                    <a href="/signout" class="navigation-item w-nav-link">Signout</a>
+                    
+                    {% else %}
                     <a href="/login"class="navigation-item w-nav-link">Login</a>
                     <a href="/signup" class="navigation-item w-nav-link">Signup</a>
-                    <a href="/about" class="navigation-item w-nav-link">About</a>
-                    <a href="/contact"class="navigation-item w-nav-link">Contact</a></nav>
-                <div class="menu-button w-nav-button"></div>
+                    
+                    {% endif %} 
+                    <a href="/about/" class="navigation-item w-nav-link">About</a>
+                    <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
+
+                <!-- </nav> -->
+                <!-- <div class="menu-button w-nav-button"></div> -->
             </div>
         </div>
     </div>

@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.urls import path,include
 from . import views
 from main.views import proxy
@@ -16,7 +17,7 @@ urlpatterns = [
     path('category/',views.category,name="category"),
     path('category/<int:pk>/',views.category_detail,name="detail_page"),
     path('proxy',views.proxy,name='proxy'),
-
-
+    path('signout', views.signout, name='signout'),
     
 ]
+ 
