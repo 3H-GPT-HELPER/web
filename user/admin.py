@@ -9,9 +9,9 @@ from . import models
 #     pass
 # admin.site.register(Users,UserAdmin)
 
-@admin.register(models.Users)
-class CustomUserAdmin(admin.ModelAdmin):
-    pass
+# @admin.register(models.Users)
+# class CustomUserAdmin(admin.ModelAdmin):
+#     pass
 
 class UserKeywordsAdmin(admin.ModelAdmin):
     pass

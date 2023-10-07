@@ -16,7 +16,7 @@ import requests
 import json
 from django.http.request import HttpRequest
 from .models import Content
-from user.models import UserCategory,Users
+from user.models import UserCategory
 #pip install nltk, scikit-learn, pandas, konlpy 필요
 import nltk
 from nltk.corpus import stopwords
@@ -42,6 +42,7 @@ from .cal_similarity import cal_similarity
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import make_password
 
 def index(request):
     users = User.objects.all()
@@ -51,23 +52,25 @@ def index(request):
 
     return render(request,'main/index.html')
 
-def signup(request):
+# def signup(request):
 
-    if request.method == "POST":
-        email = request.POST['Email']
-        name = request.POST['Name']
-        password = request.POST['Password']
+#     if request.method == "POST":
+#         email = request.POST['Email']
+#         username = request.POST['Name']
+#         password = request.POST['Password']
 
-        myuser = User.objects.create_user(email, name, password)
-        # myuser.name = name
+#         myuser = User.objects.create_user(email, username, password)
+#         print(myuser.password)
+#         #myuser = User.objects.create(username=username, password=make_password(password),email=email)
         
-        myuser.save()
 
-        messages.success(request, "Your account has been successfully created.")
+#         myuser.save()
 
-        return redirect('login')
+#         messages.success(request, "Your account has been successfully created.")
 
-    return render(request,"main/signup.html")
+#         return redirect('/')
+
+#     return render(request,"main/signup.html")
 
 from .extract_topic import *
 
@@ -78,34 +81,34 @@ answer_list=deque(answer_list)
 
 def signup(request: HttpRequest, *args, **kwargs):
     if request.method=='POST':
-        form = SignupForm(request.POST)
+        #form = SignupForm(request.POST)
 
         username = request.POST.get('username')
-        userEmail=request.POST.get('email')
+        email=request.POST.get('email')
         password = request.POST.get('password2')
 
-        print(username,userEmail,password)
-
-        user2=Users(username=username,
-                        email=userEmail,
-                        password=password)
         
-        user2.save()
+        
+        # user2=Users(username=username,
+        #                 email=userEmail,
+        #                 password=password)
 
-        if form.is_valid():
-            user=form.save()
-            user2=Users(username=username,
-                        email=userEmail,
-                        password=password)
-            user.save()
-            user2.save()
+        #user=form.save()
+        user=User.objects.create_user(email=email, username=username, password=password)
+        print(user.username,email,user.password)
+        user.save()
+
 
             #auth_login(request,user)
-            return redirect('/')
+        return redirect('/')
+        
+        
+        # if form.is_valid():
+            
     
     else:
         form=SignupForm()
-    return render(request,"main/signup2.html",{"form":form})
+        return render(request,"main/signup2.html",{"form":form})
 
 
 # def login(request):
@@ -115,23 +118,46 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 @csrf_exempt
 def login(request):
+    if request.method == 'POST':
+        username=request.POST.get('username')
+        userEmail=request.POST.get('userEmail')
+        userpassword=request.POST.get('password')
 
-    if request.method=="POST":
-            email = request.POST['Email']
-            password = request.POST['Password']
+        #huda 해결해야하는 부분
+        user = auth.authenticate(
+            request,username=username,password=userpassword)
+        
+        if user is not None:
+            auth.login(request,user)
+            print("login success")
+    
+            return render(request,"main/login_success.html")
 
-            user = auth.authenticate(request,email=email, password=password)
+        else:
+            print("try again")
+            return render(request, 'main/login.html')
 
-            if user is not None:
-                auth.login(request, user)
-                # name = user.name
-                return render(request, 'main/index.html') # , {'name': Name}
+    else:
+        #return render(request, 'user/login.html', context)
+        return render(request, 'main/login.html')
+# def login(request):
 
-            else:
-                messages.error(request, "Bad Credentials!")
-                return redirect(index)
+#     if request.method=="POST":
+#             email = request.POST['Email']
+#             password = request.POST['Password']
 
-    return render(request, 'main/login.html')
+#             user = auth.authenticate(request,email=email, password=password)
+
+#             if user is not None:
+#                 auth.login(request, user)
+#                 # name = user.name
+#                 return render(request, 'main/index.html') # , {'name': Name}
+
+#             else:
+#                 messages.error(request, "Bad Credentials!")
+#                 return redirect(index)
+
+#     return render(request, 'main/login.html')
 
     # if request.method == 'POST':
     #     form = AuthenticationForm(request, request.POST)
@@ -154,7 +180,7 @@ from django.contrib.auth import logout as auth_logout
 def logout(request):
     auth_logout(request)
 
-    return render(request,'user/logout_success.html')
+    return render(request,'main/logout_success.html')
 
 def signout (request):
     logout(request)
@@ -197,7 +223,7 @@ def category_detail(request,pk):
     category_id=pk
 
     print(uc_name,category_id)
-    userContents=Content.objects.filter(inserted_category__inserted_category=uc_name)
+    userContents=Content.objects.filter(inserted_category__inserted_category=uc_name,user_id__username=request.user.username)
     context={'contents':userContents,'category_id':category_id}
 
     return render(request,'main/detail.html',context=context)

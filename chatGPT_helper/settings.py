@@ -35,6 +35,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#password hash
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+]
+
+
 
 # Application definition
 
@@ -57,7 +63,7 @@ INSTALLED_APPS = [
 
 LOGIN_URL='account_login'
 
-AUTH_USER_MODEL = 'user.Users'	# [app].[모델명]
+#AUTH_USER_MODEL = 'user.Users'	# [app].[모델명]
 
 
 SITE_ID=4

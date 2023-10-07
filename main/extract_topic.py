@@ -10,7 +10,7 @@ import requests
 import json
 from django.http.request import HttpRequest
 from .models import Content
-from user.models import UserCategory,Users
+from user.models import UserCategory
 #pip install nltk, scikit-learn, pandas, konlpy 필요
 import nltk
 from nltk.corpus import stopwords

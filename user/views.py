@@ -4,12 +4,13 @@ import requests
 import json
 from django.contrib import auth
 
-from .models import Users
 from django.template import loader
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.backends import ModelBackend
 from django.views.decorators.csrf import csrf_exempt
+
+from django.contrib.auth.models import User
 
 
 #kakao login(나중에 settings.py나 secrets.json으로 옮기기)
@@ -34,27 +35,15 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
-        username=request.POST.get('username')
+        #username=request.POST.get('username')
         userEmail=request.POST.get('userEmail')
         userpassword=request.POST.get('password')
 
-        print(username,userEmail,userpassword)
+        print(userEmail,userpassword)
 
         #huda 해결해야하는 부분
         user = auth.authenticate(
-            request, username=username, password=userpassword,email=userEmail)
-        
-        ##
-        # from django.contrib.auth.hashers import check_password
-
-        # user = Users.objects.get(username=username)
-        # entered_password =userpassword
-
-        # if check_password(entered_password, user.password):
-        #    print("pw success")
-        # else:print('pw failed')
-
-        ##
+            request, password=userpassword,email=userEmail)
         
         if user is not None:
             auth.login(request,user)
@@ -64,29 +53,11 @@ def login(request):
 
         else:
             print("try again")
-            return render(request, 'user/login.html')
-        # context = {
-        #     "recent_login_id": request.session.get('login_session'),
-        #     "isidstorage": request.session.get('isidstorage')
-        # }
-        
-    #     form = AuthenticationForm(request, request.POST)
-    #     if form.is_valid():
-    #         auth_login(request, form.get_user())
-
-    #     return redirect('user:login_success')
-    # else:
-
-    #     form = AuthenticationForm()
-
-    # context = {
-    #     'form': form
-
-    # }
+            return redirect(request, 'login.html')
 
     else:
         #return render(request, 'user/login.html', context)
-        return render(request, 'user/login.html')
+        return render(request, 'login.html')
 
 
 def loginSuccess(request):
@@ -140,8 +111,8 @@ def kakaoLoginRedirect(request):
     # print(info,kakao_id)
 
     try:
-        test=Users.objects.get(user_id=kakao_id)
-    except Users.DoesNotExist:
+        test=User.objects.get(user_id=kakao_id)
+    except User.DoesNotExist:
         test=None
 
     print(test)
