@@ -24,8 +24,6 @@ import pandas as pd
 nltk.download('punkt')
 nltk.download('stopwords')
 
-from konlpy.tag import Okt
-
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
