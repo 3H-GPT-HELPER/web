@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -54,3 +55,61 @@
     
 </div>
 {% endblock %}
+=======
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'js/homepage.js' %}"></script>
+    <script src="{% static 'js/kakao.js' %}"></script>                  
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js" integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh" crossorigin="anonymous"></script> 
+    <script>
+    Kakao.init('d6100ded4adb9ae94cb7303bae1ce346'); //JAVASCRIPT_KEY
+    console.log(Kakao.isInitialized());
+    </script>
+</head>
+<body>
+    <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+    role="banner" class="navigation w-nav">
+    <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}" width="65" alt="" class="logo-image" /></a>
+    </div>
+    </div>
+
+</body>
+{% block content %}
+<div class="container my-3">
+    <form method="post" action="{% url 'main_login' %}">
+        {% csrf_token %}
+        {% include "user/form_errors.html" %}
+        <div class="mb-3">
+            <label for="username">사용자이름</label>
+            <input type="text" class="form-control" name="username" id="username"
+                   value="{{ form.username.value|default_if_none:'' }}">
+        </div>
+        <div class="mb-3">
+            <label for="userEmail">이메일</label>
+            <input type="text" class="form-control" name="userEmail" id="userEmail"
+                   value="{{ form.userEmail.value|default_if_none:'' }}">
+        </div>
+        <div class="mb-3">
+            <label for="password">비밀번호</label>
+            <input type="password" class="form-control" name="password" id="password"
+                   value="{{ form.password.value|default_if_none:'' }}">
+        </div>
+        <button type="submit" class="btn btn-primary">로그인</button>
+    </form>
+
+    <div style="display:none" data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
+        <div class="user-form-error-msg"
+            wf-login-form-general-error-error="We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have problems."
+            wf-login-form-invalid-email_or_password-error="Invalid email or password. Please try again.">
+            We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have
+            problems.</div>
+    </div>
+    
+</div>
+{% endblock %}
+>>>>>>> 41afd0b1f6ea561335092198fade5a205c53e477

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -74,3 +75,81 @@
 
 
 
+=======
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'js/homepage.js' %}"></script>
+    <script src="{% static 'js/kakao.js' %}"></script>                  
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js" integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh" crossorigin="anonymous"></script> 
+    <script>
+    Kakao.init('d6100ded4adb9ae94cb7303bae1ce346'); //JAVASCRIPT_KEY
+    console.log(Kakao.isInitialized());
+    </script>
+</head>
+
+<body>
+  <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+    role="banner" class="navigation w-nav">
+    <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}" width="65" alt="" class="logo-image" /></a>
+    </div>
+    </div>
+</div>
+    <div class="w-users-userformpagewrap">
+        <div class="w-users-userloginformwrapper">
+            <form method="post" action="{% url 'main_login' %}">
+                {% csrf_token %}
+                <div class="w-users-userformheader"><h2>Log in</h2></div>
+
+                <!-- <label for="Email">Email</label>
+                <input type="email" maxlength="256" placeholder="" name="userEmail" id="wf-log-in-email" class="w-input" autoComplete="username" required="" 
+                data-wf-user-form-input-type="email" /> -->
+
+                <label for="Name">Name</label>
+                <input type="Name" maxlength="256" placeholder="" name="name" id="wf-log-in-password" class="w-input" required=""
+                data-wf-user-form-input-type="name" />
+                    
+                <label for="Password">Password</label>
+                <input type="password" maxlength="256" placeholder="" name="password" id="wf-log-in-password" class="w-input" required=""
+                data-wf-user-form-input-type="password" />
+
+                <input type="submit" value="Log In" data-wait="Please wait..." class="w-users-userformbutton submit-button w-button" />
+                <div class="w-users-userformfooter"><span>Don&#x27;t have an account?</span>
+                    <a href="/signup" class="w-inline-block">Sign Up</a></div>
+            </form>
+            
+            <div style="display:none" data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
+                <div class="user-form-error-msg"
+                    wf-login-form-general-error-error="We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have problems."
+                    wf-login-form-invalid-email_or_password-error="Invalid email or password. Please try again.">
+                    We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have
+                    problems.</div>
+            </div>
+        </div>
+
+        
+        <!-- <div class="text-block-6">or</div>
+        <img class="w-button" src="{% static 'img/kakao_login.png' %}" loading="lazy" sizes="(max-width: 600px) 100vw, 600px"
+            srcset="{% static 'img/kakao_login.png' %} 500w, {% static 'img/kakao_login.png' %} 600w"
+            alt="" />
+            
+        <div class="text-block-6">or</div>
+          <a id="kakao-login-btn" href="javascript:loginWithKakao()">
+            <img onclick="loginWithKakao" class="w-button" src="{% static 'img/kakao_login.png' %}" loading="lazy" sizes="(max-width: 600px) 100vw, 600px"
+              alt="Kakao login button" />
+          </a>
+          <p id="token-result"></p> -->
+
+    </div>
+
+</body>
+
+</html>
+
+
+
+>>>>>>> 41afd0b1f6ea561335092198fade5a205c53e477
