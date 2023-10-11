@@ -52,68 +52,29 @@ def index(request):
 
     return render(request,'main/index.html')
 
-# def signup(request):
-
-#     if request.method == "POST":
-#         email = request.POST['Email']
-#         username = request.POST['Name']
-#         password = request.POST['Password']
-
-#         myuser = User.objects.create_user(email, username, password)
-#         print(myuser.password)
-#         #myuser = User.objects.create(username=username, password=make_password(password),email=email)
-        
-
-#         myuser.save()
-
-#         messages.success(request, "Your account has been successfully created.")
-
-#         return redirect('/')
-
-#     return render(request,"main/signup.html")
-
 from .extract_topic import *
 
 fullanswer_str=""
 answer_str=""
 answer_list=[]
 answer_list=deque(answer_list)
+authenticated=False
+username=""
 
 def signup(request: HttpRequest, *args, **kwargs):
     if request.method=='POST':
-        #form = SignupForm(request.POST)
-
         username = request.POST.get('username')
         email=request.POST.get('email')
         password = request.POST.get('password2')
-
-        
-        
-        # user2=Users(username=username,
-        #                 email=userEmail,
-        #                 password=password)
-
-        #user=form.save()
         user=User.objects.create_user(email=email, username=username, password=password)
         print(user.username,email,user.password)
         user.save()
-
-
-            #auth_login(request,user)
         return redirect('/')
-        
-        
-        # if form.is_valid():
             
-    
     else:
         form=SignupForm()
         return render(request,"main/signup2.html",{"form":form})
-
-
-# def login(request):
-#     return render(request, 'main/login2.html')
-
+    
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 @csrf_exempt
@@ -138,47 +99,13 @@ def login(request):
             return render(request, 'main/login.html')
 
     else:
-        #return render(request, 'user/login.html', context)
         return render(request, 'main/login.html')
-# def login(request):
-
-#     if request.method=="POST":
-#             email = request.POST['Email']
-#             password = request.POST['Password']
-
-#             user = auth.authenticate(request,email=email, password=password)
-
-#             if user is not None:
-#                 auth.login(request, user)
-#                 # name = user.name
-#                 return render(request, 'main/index.html') # , {'name': Name}
-
-#             else:
-#                 messages.error(request, "Bad Credentials!")
-#                 return redirect(index)
-
-#     return render(request, 'main/login.html')
-
-    # if request.method == 'POST':
-    #     form = AuthenticationForm(request, request.POST)
-    #     if form.is_valid():
-    #         auth_login(request, form.get_user())
-
-    #         return redirect('user:login_success')
-    # else:
-
-    #     form = AuthenticationForm()
-
-    # context = {
-    #     'form': form
-
-    # }
-
-    # return render(request, 'main/login2.html', context)
 
 from django.contrib.auth import logout as auth_logout
 def logout(request):
     auth_logout(request)
+    global authenticated
+    authenticated=False
 
     return render(request,'main/logout_success.html')
 
@@ -198,9 +125,6 @@ def main(request):
     
     userContents=Content.objects.filter(userName="hw")
     context={'contents':userContents}
-    #preprocessing(userContents)
-
-    
     return render(request, 'main/main.html',context=context)
 
 def category(request):
@@ -228,8 +152,19 @@ def category_detail(request,pk):
 
     return render(request,'main/detail.html',context=context)
 
+from django.http import JsonResponse
 @csrf_exempt
 def proxy(request):
+    if request.method=='GET':
+
+        print("authenticated test2",authenticated)
+        if authenticated:
+            print("chrome login check:",username)
+            return JsonResponse({'authenticated': 'True', 'username': username})
+        else:
+            print("not login,,,,")
+            return JsonResponse({'authenticated': 'False'})
+
     if request.method == 'POST':    
         try:
             data=json.loads(request.body.decode('utf-8'))
@@ -248,12 +183,6 @@ def proxy(request):
             print("?!",request.user.username)
             print("160answer_str: ", answer_str) #잘 나옴
 
-            # new_request = HttpRequest()
-            # new_request.method = 'GET'
-
-            #add_contents(new_request,fullanswer_str)
-           
-
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')
         
@@ -263,11 +192,13 @@ def proxy(request):
     return JsonResponse({'error': 'Invalid request method'})
 
 def index(request):
-    # users = User.objects.all()
-
-    # for user in users:
-    #     print(user.email)
-    print("user test1:",request.user.username)
+    if request.user.is_authenticated:
+        global authenticated
+        authenticated=True
+        print("authenticated test1",authenticated)
+        global username
+        username=request.user.username
+        print("user test1:",request.user.username)
 
     global fullanswer_str
     global answer_str
@@ -280,10 +211,6 @@ def index(request):
             print("if fullanswer_str")
             fullanswer_str=fullanswer_str[3:]
             add_contents(request,fullanswer_str)
-            
-            #return_dic = cal_similarity(request, answer_str) #??
-            #print(return_dic)
-
     
     return render(request,'main/index.html')
 
