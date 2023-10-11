@@ -3,41 +3,195 @@ from django.http import JsonResponse
 from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from django.middleware.csrf import get_token
 
+from django.contrib import auth
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 
+
+from httpx import Auth
+from .forms import SignupForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
 from django.http.request import HttpRequest
-
 from .models import Content
-from user.models import UserKeywords
-
-#pip install nltk, scikit-learn, pandas 필요
+from user.models import UserCategory
+#pip install nltk, scikit-learn, pandas, konlpy 필요
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize 
 
 import pandas as pd
+from collections import deque
 
 nltk.download('punkt')
 nltk.download('stopwords')
+
+#from konlpy.tag import Okt
 
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 
 import numpy as np
+import sys
+#sys.path.append('/Users/hgy/Desktop/hgy/EWHA/2023_1(4)/Final_project/3H/main')
+from .cal_similarity import cal_similarity
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import make_password
 
 def index(request):
+    users = User.objects.all()
+
+    for user in users:
+        print(user.email)
+
     return render(request,'main/index.html')
 
-def signup(request):
-    return render(request,"main/signup.html")
+# def signup(request):
 
+#     if request.method == "POST":
+#         email = request.POST['Email']
+#         username = request.POST['Name']
+#         password = request.POST['Password']
+
+#         myuser = User.objects.create_user(email, username, password)
+#         print(myuser.password)
+#         #myuser = User.objects.create(username=username, password=make_password(password),email=email)
+        
+
+#         myuser.save()
+
+#         messages.success(request, "Your account has been successfully created.")
+
+#         return redirect('/')
+
+#     return render(request,"main/signup.html")
+
+from .extract_topic import *
+
+fullanswer_str=""
+answer_str=""
+answer_list=[]
+answer_list=deque(answer_list)
+
+def signup(request: HttpRequest, *args, **kwargs):
+    if request.method=='POST':
+        #form = SignupForm(request.POST)
+
+        username = request.POST.get('username')
+        email=request.POST.get('email')
+        password = request.POST.get('password2')
+
+        
+        
+        # user2=Users(username=username,
+        #                 email=userEmail,
+        #                 password=password)
+
+        #user=form.save()
+        user=User.objects.create_user(email=email, username=username, password=password)
+        print(user.username,email,user.password)
+        user.save()
+
+
+            #auth_login(request,user)
+        return redirect('/')
+        
+        
+        # if form.is_valid():
+            
+    
+    else:
+        form=SignupForm()
+        return render(request,"main/signup2.html",{"form":form})
+
+
+# def login(request):
+#     return render(request, 'main/login2.html')
+
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+@csrf_exempt
 def login(request):
-    return render(request, 'main/login.html')
+    if request.method == 'POST':
+        username=request.POST.get('username')
+        userEmail=request.POST.get('userEmail')
+        userpassword=request.POST.get('password')
+
+        #huda 해결해야하는 부분
+        user = auth.authenticate(
+            request,username=username,password=userpassword)
+        
+        if user is not None:
+            auth.login(request,user)
+            print("login success")
+    
+            return render(request,"main/login_success.html")
+
+        else:
+            print("try again")
+            return render(request, 'main/login.html')
+
+    else:
+        #return render(request, 'user/login.html', context)
+        return render(request, 'main/login.html')
+# def login(request):
+
+#     if request.method=="POST":
+#             email = request.POST['Email']
+#             password = request.POST['Password']
+
+#             user = auth.authenticate(request,email=email, password=password)
+
+#             if user is not None:
+#                 auth.login(request, user)
+#                 # name = user.name
+#                 return render(request, 'main/index.html') # , {'name': Name}
+
+#             else:
+#                 messages.error(request, "Bad Credentials!")
+#                 return redirect(index)
+
+#     return render(request, 'main/login.html')
+
+    # if request.method == 'POST':
+    #     form = AuthenticationForm(request, request.POST)
+    #     if form.is_valid():
+    #         auth_login(request, form.get_user())
+
+    #         return redirect('user:login_success')
+    # else:
+
+    #     form = AuthenticationForm()
+
+    # context = {
+    #     'form': form
+
+    # }
+
+    # return render(request, 'main/login2.html', context)
+
+from django.contrib.auth import logout as auth_logout
+def logout(request):
+    auth_logout(request)
+
+    return render(request,'main/logout_success.html')
+
+def signout (request):
+    logout(request)
+    messages.success(request, "Logged out succesfully!")
+    return redirect(index)
+
+def about(request):
+    return render(request, 'main/about.html')
+
+def contact(request):
+    return render(request, 'main/contact.html')
 
 def main(request):
     print("this is main page")
@@ -45,141 +199,175 @@ def main(request):
     userContents=Content.objects.filter(userName="hw")
     context={'contents':userContents}
     #preprocessing(userContents)
+
     
     return render(request, 'main/main.html',context=context)
 
 def category(request):
-    userkeywords=UserKeywords.objects.filter(user_id__name='hw')
-    context={'userkeywords':userkeywords}
-    
-    #우선 여기에 topic 과 category 매칭 코드 구현:return값 해당 category_id
-    #content의 topcisd와 userkeywords의 name을 비교하면됨 그 후 select된 걸 content.category로 지정
-    #index=content.objects.filter(category__serKeywords_id)로 번호 할당받기
-    #index별로 detail페이지 생성
+    #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+    userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
 
-    #전달받은 top topic 3개 리스트와 UserKeywords.name 중 동일한거 match 후 그 유저키워드.네임을 content.category로 지정 이거 초반에 content.save할때완료
-
-
-
-    
-    
-
+    print("category!!!",request.user.username) #잘 나옴
+    context={'userCategories':userCategories}
+   
     return render(request,"main/category.html",context=context)
 
-def category_detail(request,category_id):
+def category_detail(request,pk):
+    print("category_detail!!!",request.user.username) #잘 나옴
+    print("pk",pk)
 
-    #usesrkeywords.name이랑 content.category랑 같으면 그 content들을 가져와서 보낸다.
-    #userkeywords.id를 페이지 id로 넘긴다
+    #category_id는 자동생성 및 전달되는 pk
+    uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
+    print('uc: ', uc.inserted_category)
+    uc_name=uc.inserted_category
+    category_id=pk
 
-    #category 1
-    uk=UserKeywords.objects.get(userKeywords_id=category_id)
-    
-    uk_name=uk.name
-    category_id=uk.userKeywords_id
-    userContents=Content.objects.filter(category=uk_name)
+    print(uc_name,category_id)
+    userContents=Content.objects.filter(inserted_category__inserted_category=uc_name,user_id__username=request.user.username)
     context={'contents':userContents,'category_id':category_id}
-    #category 2
-
-    #category_id와 동일하게 분류된 content를 filter 그 contents던지기
-    #userContents=Content.objects.filter(userName="hw")
-    
-    #category->userKeywords_id를 받은거로 detail 페이지 생성
 
     return render(request,'main/detail.html',context=context)
-
 
 @csrf_exempt
 def proxy(request):
     if request.method == 'POST':    
         try:
             data=json.loads(request.body.decode('utf-8'))
-            answer=data['data']
-            #answer=answer[0]
-            print("!!!!!!!!!!!!!!!!!!!!!!")
-            print(type(answer))
-            
-            answer_str = ''.join(answer)
-            print(answer_str)
-            
-            #entity 생성 
-            content=Content(answer=answer_str)
-            
-            topics = preprocessing(answer_str)
-            #print(topic)
-            
-            topic_arr = topics.split("/")
-            content.topics = topics
+            answer=data['pTagContents']
+            full_answer=data['complexContents']
 
+            global fullanswer_str
+            global answer_str
             
-            category=get_category(topic_arr)
-            print(category)
-            content.category=category
+            answer_str = ''.join(answer) #text만 있는 답변
+            fullanswer_str='new'
+            fullanswer_str += ''.join(full_answer) #코드까지 합쳐진 답변
 
-            content.save()
-            #print(type(content))
+            answer_list.append(fullanswer_str)
+            #request.session['received_data'] = fullanswer_str
+            print("?!",request.user.username)
+            print("160answer_str: ", answer_str) #잘 나옴
 
+            # new_request = HttpRequest()
+            # new_request.method = 'GET'
+
+            #add_contents(new_request,fullanswer_str)
+           
 
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')
         
         
         print("main으로 보내버려~")
-       
 
     return JsonResponse({'error': 'Invalid request method'})
 
-def preprocessing(answer):
-    #print(context['contents'])
+def index(request):
+    # users = User.objects.all()
+
+    # for user in users:
+    #     print(user.email)
+    print("user test1:",request.user.username)
+
+    global fullanswer_str
+    global answer_str
+
+    print("206answer_str: ", answer_str)
     
-    data = pd.DataFrame({'answer':[answer]})
-    #context = context['contents']
-    #print(context['contents'])
-    data['answer'] = data.apply(lambda row: nltk.word_tokenize(row['answer']),axis=1)
-    print(data)
-    stop_words_list = stopwords.words('english')
+    while answer_list:
+        fullanswer_str=answer_list.popleft()
+        if fullanswer_str[0:3]=='new':
+            print("if fullanswer_str")
+            fullanswer_str=fullanswer_str[3:]
+            add_contents(request,fullanswer_str)
+            
+            #return_dic = cal_similarity(request, answer_str) #??
+            #print(return_dic)
+
+    
+    return render(request,'main/index.html')
+
+def add_contents(request,fullanswer_str):
+    
+    print("user test:",request.user.username)
+    
+    uc = ""
+    
+    return_dic = cal_similarity(request,answer_str)
+    print(return_dic)
+    
+    if 'existed' in return_dic:
+        category = return_dic.get('existed')
+        uc = UserCategory.objects.get(inserted_category=category)
+        topics = extract_topic(answer_str)
+    elif 'new' in return_dic:
+        topics = extract_topic(answer_str)
+        topic_arr = topics.split("/")
+        #category = get_category(topic_arr) <- 이 부분 확인 필요
+        category = topic_arr[0]
+        print("category is ", category)
+        
+        try:
+            if UserCategory.objects.get(inserted_category=category,user_id=request.user) != None:
+                uc = UserCategory.objects.get(inserted_category = category,user_id=request.user)
+                print("try if")
+            else:
+                uc = UserCategory(inserted_category = category,user_id=request.user)
+                uc.save()
+                print("try else")
+        except:
+            uc = UserCategory(inserted_category = category,user_id=request.user)
+            uc.save()
+            print("except")
+    else:
+        print("no uc category")
+    
+    #content entity 생성 
+    content=Content(answer=fullanswer_str,
+                    user_id=request.user,
+                    topics=topics,
+                    inserted_category=uc)
+                   
+    
+    content.save()
+
+    return
+            
+    
+    
+def preprocessing_eng(data):
     tokenized = data['answer'].apply(lambda x: [word for word in x if len(word) > 2])
     detokenized = []
     for i in range(len(data)):
         t = ' '.join(tokenized[i])
         detokenized.append(t)
     context = detokenized
+    #stop_words_list = stopwords.words('english')
     vectorizer = TfidfVectorizer(stop_words='english',max_features=10)
     X = vectorizer.fit_transform(context)
     
-    lda_model = LatentDirichletAllocation(n_components=1, learning_method='online', random_state=777, max_iter=3)
-    lda_top = lda_model.fit_transform(X)
+    return X, vectorizer 
     
-    topic = get_topics(lda_model.components_,vectorizer.get_feature_names_out())
-    #print('/'.join(topic))
-    topics= '/'.join(topic)
+'''
+def preprocessing_kr(data):
+    okt = Okt()
+    tokenized = data['answer'].apply(lambda x: [word for word in okt.nouns(x)]) #명사로만 **
+    detokenized = []
+    for i in range(len(data)):
+        t = ' '.join(tokenized[i])
+        detokenized.append(t)
+    context = detokenized
+    vectorizer = TfidfVectorizer(max_features=10)
+    X = vectorizer.fit_transform(context)
     
-    return topics
+    return X, vectorizer
+'''
     
-    
-    
-    
-def get_topics(components, feature_names, n=3):
-    topic = []
-    
-    '''
-    for idx, topic in enumerate(components):
-        print("Topic %d:" % (idx+1),[(feature_names[i], topic[i].round(2)) for i in topic.argsort()[:-n - 1:-1]])
-        #for i in topic.argsort()[:-n - 1:-1] :
-            #print("Topic %d:" % (idx+1),[(feature_names[i], topic[i].round(2)) ])
-            #topic += feature_names[i]
-    '''
-    for idx, topic in enumerate(components):
-       # top_features = [(feature_names[i], topic[i].round(2)) for i in topic.argsort()[:-n - 1:-1]]
-       top_features = [feature_names[i] for i in topic.argsort()[:-n - 1:-1]]
-
-    print(top_features)
-        
-    return top_features
 
 #둘다 리스트로 보내서 돌려봐요,,
 def get_category(top_features):
     selected_category=""
-    userkeywords_set=UserKeywords.objects.filter(user_id__name='hw')
+    userkeywords_set=UserCategory.objects.filter(user_id__name='hw')
     uk_list=[]
     for k in userkeywords_set:
         uk_list.append(k.name)
