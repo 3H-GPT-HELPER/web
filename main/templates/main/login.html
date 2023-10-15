@@ -7,7 +7,15 @@
     <title>Login</title>
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
     <script src="{% static 'js/homepage.js' %}"></script>
+<<<<<<< HEAD
     <script src="{% static 'js/kakao.js' %}"></script>                  
+=======
+<<<<<<< HEAD
+    <script src="{% static 'js/kakao.js' %}"></script>                  
+=======
+    <script src="{% static 'js/kakao.js' %}"></script>                    
+>>>>>>> ef29deeba9a66a40ead2dd3b13f897f83d54d581
+>>>>>>> develop
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js" integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh" crossorigin="anonymous"></script> 
     <script>
     Kakao.init('d6100ded4adb9ae94cb7303bae1ce346'); //JAVASCRIPT_KEY
@@ -21,6 +29,7 @@
     </div>
     </div>
 
+<<<<<<< HEAD
 </body>
 {% block content %}
 <div class="container my-3">
@@ -31,6 +40,35 @@
             <label for="username">사용자이름</label>
             <input type="text" class="form-control" name="username" id="username"
                    value="{{ form.username.value|default_if_none:'' }}">
+=======
+</div>
+    <div class="w-users-userformpagewrap">
+        <div class="w-users-userloginformwrapper">
+            <form method="post" data-wf-user-form-type="login" data-wf-user-form-redirect="/">
+            {% csrf_token %}
+                <div class="w-users-userformheader"><h2>Log in</h2></div>
+
+                <label for="Email">Email</label>
+                <input type="email" maxlength="256" placeholder="" name="Email" id="wf-log-in-email" class="w-input" autoComplete="email" required="" 
+                data-wf-user-form-input-type="email" />
+                    
+                <label for="Password">Password</label>
+                <input type="password" maxlength="256" placeholder="" name="Password" id="wf-log-in-password" class="w-input" required=""
+                data-wf-user-form-input-type="password" />
+
+                <input type="submit" value="Log In" data-wait="Please wait..." class="w-users-userformbutton submit-button w-button" />
+                <div class="w-users-userformfooter"><span>Don&#x27;t have an account?</span>
+                    <a href="/signup" class="w-inline-block">Sign Up</a></div>
+            </form>
+            
+            <div style="display:none" data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
+                <div class="user-form-error-msg"
+                    wf-login-form-general-error-error="We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have problems."
+                    wf-login-form-invalid-email_or_password-error="Invalid email or password. Please try again.">
+                    We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have
+                    problems.</div>
+            </div>
+>>>>>>> develop
         </div>
         <div class="mb-3">
             <label for="userEmail">이메일</label>

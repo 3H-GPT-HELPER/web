@@ -3,10 +3,6 @@ from django.http import JsonResponse
 from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from django.middleware.csrf import get_token
 
-from django.contrib import auth
-from django.contrib.auth import login as auth_login
-from django.contrib.auth import logout as auth_logout
-
 
 from httpx import Auth
 from .forms import SignupForm
@@ -28,8 +24,6 @@ from collections import deque
 
 nltk.download('punkt')
 nltk.download('stopwords')
-
-#from konlpy.tag import Okt
 
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -142,11 +136,20 @@ def login(request):
         return render(request, 'main/login.html')
 # def login(request):
 
+<<<<<<< HEAD
 #     if request.method=="POST":
 #             email = request.POST['Email']
 #             password = request.POST['Password']
 
 #             user = auth.authenticate(request,email=email, password=password)
+=======
+            user = authenticate(email=email, password=password)
+
+            if user is not None:
+                login(request, user)
+                # name = user.name
+                return render(request, 'main/index.html') # , {'name': Name}
+>>>>>>> develop
 
 #             if user is not None:
 #                 auth.login(request, user)
@@ -204,10 +207,15 @@ def main(request):
     return render(request, 'main/main.html',context=context)
 
 def category(request):
+<<<<<<< HEAD
     #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
 
     print("category!!!",request.user.username) #잘 나옴
+=======
+    print("user",request.user)
+    userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
+>>>>>>> develop
     context={'userCategories':userCategories}
    
     return render(request,"main/category.html",context=context)

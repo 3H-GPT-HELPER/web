@@ -21,20 +21,33 @@
 
   <div class="container cc-heading-wrap">
     <div class="heading-5">Category</div>
+<<<<<<< HEAD
   </div>
 
   <div class="w-dyn-list">
     {%for category in userCategories %}
         <button class="topic-buttons" onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
+=======
+  </div>pip in
+
+  <div class="w-dyn-list">
+    {%for category in userCategories %}
+    <button class="collection-list w-dyn-items"
+      onclick="location.href='/category/{{category.userCategory_id}}'">{{category.inserted_category}}</button>
+>>>>>>> develop
     {%endfor%}
   </div>
 
   <input id="readInput">
 
+<<<<<<< HEAD
   <button src="{% static 'img/plus.png' %}" onclick="myText()"></button>
   <img src="https://uploads-ssl.webflow.com/64a4af65db33c4133c120e71/64ad499279335744b7dc4a50_plus.png"
   loading="lazy" width="17" alt="" />
 
+=======
+  <button src="{% static 'img/plus.png' %}" onclick="myText()"></button>/>
+>>>>>>> develop
 
   <p id="demo"></p>
 
@@ -48,3 +61,7 @@
 
 </html>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
