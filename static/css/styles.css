@@ -1757,6 +1757,7 @@ textarea.w-input, textarea.w-select {
 .w-nav {
   z-index: 1000;
   background: #fffff0;
+  background: #fffff0;
   position: relative;
 }
 
