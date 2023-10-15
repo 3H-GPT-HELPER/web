@@ -6,9 +6,10 @@
     <title>Login Success</title>
 </head>
 <body>
-    {{request.user.username}}님<br>
-    가입 이메일:{{request.user.email}}
-    <h2>로그인 완료</h2>
+    <i class="checkmark">✓</i>
+    <p class="detail-a">{{request.user.username}}님<br>
+        가입 이메일:{{request.user.email}}</p>
+    <h2 class="detail-1">로그인 완료</h2>
     <a href="/">HOME</a>
 </body>
 </html>

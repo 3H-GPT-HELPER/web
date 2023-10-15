@@ -4,10 +4,8 @@
 <html>
 
 <head>
-  <meta charset="utf-8" />
-    <title>About</title>
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
-    <script src="{% static 'js/homepage.css' %}"></script>
+  <title>Category</title>
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -19,22 +17,28 @@
     </div>
   </div>
 
-  <div class="container cc-heading-wrap">
-    <div class="heading-5">Category</div>
+  <div class="section">
+    <div class="container cc-heading-wrap">
+      <h1 class="heading-5">Category</h1>
+      <div class="store-categories-wrap">
+
+          <div class="collection-wrap">
+            {%for category in userkeywords %}
+            <button class="button-74" role="button"
+              onclick="location.href='/category/{{category.userKeywords_id}}'">{{category.name}}</button>
+            {%endfor%}
+          </div>
+
+          <!-- <input type="text" id="new-keyword-input" placeholder="Enter a new keyword">
+          <button id="add-button">Add New Category</button> -->
+
+      </div>
+    </div>
   </div>
 
-  <div class="w-dyn-list">
-    {%for category in userCategories %}
-        <button class="topic-buttons" onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
-    {%endfor%}
-  </div>
-
-  <input id="readInput">
+  <!-- <input id="readInput">
 
   <button src="{% static 'img/plus.png' %}" onclick="myText()"></button>
-  <img src="https://uploads-ssl.webflow.com/64a4af65db33c4133c120e71/64ad499279335744b7dc4a50_plus.png"
-  loading="lazy" width="17" alt="" />
-
 
   <p id="demo"></p>
 
@@ -42,9 +46,49 @@
     function myText(){
     var x = document.getElementById("myText").value;
     document.getElementById("demo").innerHTML = x;}
-  </script>
+  </script> -->
+
+  <!-- <script>
+    // Function to add a new button based on user input
+    function addNewButton() {
+      var newKeyword = document.getElementById("new-keyword-input").value;
+
+      // Ensure that a valid keyword has been entered
+      if (newKeyword.trim() !== '') {
+        var container = document.getElementById("button-container");
+
+        // Create a new button element
+        var newButton = document.createElement("button");
+        newButton.className = "button-74";
+        newButton.innerHTML = newKeyword;
+
+        // Define an onclick function to navigate based on the keyword
+        newButton.onclick = function() {
+          navigate(newKeyword);
+        };
+
+        // Append the new button to the container
+        container.appendChild(newButton);
+
+        // Clear the input field
+        document.getElementById("new-keyword-input").value = '';
+      }
+    }
+
+    // Function to navigate based on a keyword
+    function navigate(keyword) {
+      // You can construct the URL using keyword and userKeywords_id
+      var userKeywords_id = /* Look up the userKeywords_id based on the keyword */;
+      var url = "/category/" + userKeywords_id;
+
+      // Redirect to the generated URL
+      window.location.href = url;
+    }
+
+    // Add an event listener to the "Add Button" button
+    document.getElementById("add-button").addEventListener("click", addNewButton);
+  </script> -->
 
 </body>
 
 </html>
-
