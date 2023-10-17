@@ -23,22 +23,27 @@
       <div class="store-categories-wrap">
 
           <div class="collection-wrap">
-            {%for category in userkeywords %}
+            {%for category in userCategories %}
             <button class="button-74" role="button"
-              onclick="location.href='/category/{{category.userKeywords_id}}'">{{category.name}}</button>
+              onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
             {%endfor%}
+            
+          <!-- 기존꺼 -->
+          <!-- {%for category in userCategories %}
+            <button class="topic-buttons" onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
+          {%endfor%} -->
           </div>
 
-          <!-- <input type="text" id="new-keyword-input" placeholder="Enter a new keyword">
-          <button id="add-button">Add New Category</button> -->
+          
+
+          <input type="text" id="new-keyword-input" placeholder="Enter a new keyword">
+          <button id="add-button">Add New Category</button>
 
       </div>
     </div>
   </div>
 
-  <!-- <input id="readInput">
-
-<<<<<<< HEAD
+  <input id="readInput">
   <button src="{% static 'img/plus.png' %}" onclick="myText()"></button>
 
   <p id="demo"></p>
@@ -47,9 +52,9 @@
     function myText(){
     var x = document.getElementById("myText").value;
     document.getElementById("demo").innerHTML = x;}
-  </script> -->
+  </script> 
 
-  <!-- <script>
+  <script>
     // Function to add a new button based on user input
     function addNewButton() {
       var newKeyword = document.getElementById("new-keyword-input").value;
@@ -88,7 +93,7 @@
 
     // Add an event listener to the "Add Button" button
     document.getElementById("add-button").addEventListener("click", addNewButton);
-  </script> -->
+  </script>
 
 </body>
 

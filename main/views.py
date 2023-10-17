@@ -5,6 +5,7 @@ from django.middleware.csrf import get_token
 
 
 from httpx import Auth
+from django.contrib import auth
 from .forms import SignupForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -134,50 +135,6 @@ def login(request):
     else:
         #return render(request, 'user/login.html', context)
         return render(request, 'main/login.html')
-# def login(request):
-
-<<<<<<< HEAD
-#     if request.method=="POST":
-#             email = request.POST['Email']
-#             password = request.POST['Password']
-
-#             user = auth.authenticate(request,email=email, password=password)
-=======
-            user = authenticate(email=email, password=password)
-
-            if user is not None:
-                login(request, user)
-                # name = user.name
-                return render(request, 'main/index.html') # , {'name': Name}
->>>>>>> develop
-
-#             if user is not None:
-#                 auth.login(request, user)
-#                 # name = user.name
-#                 return render(request, 'main/index.html') # , {'name': Name}
-
-#             else:
-#                 messages.error(request, "Bad Credentials!")
-#                 return redirect(index)
-
-#     return render(request, 'main/login.html')
-
-    # if request.method == 'POST':
-    #     form = AuthenticationForm(request, request.POST)
-    #     if form.is_valid():
-    #         auth_login(request, form.get_user())
-
-    #         return redirect('user:login_success')
-    # else:
-
-    #     form = AuthenticationForm()
-
-    # context = {
-    #     'form': form
-
-    # }
-
-    # return render(request, 'main/login2.html', context)
 
 from django.contrib.auth import logout as auth_logout
 def logout(request):
@@ -207,17 +164,13 @@ def main(request):
     return render(request, 'main/main.html',context=context)
 
 def category(request):
-<<<<<<< HEAD
-    #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
 
     print("category!!!",request.user.username) #잘 나옴
-=======
     print("user",request.user)
-    userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
->>>>>>> develop
+    #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     context={'userCategories':userCategories}
-   
+
     return render(request,"main/category.html",context=context)
 
 def category_detail(request,pk):
