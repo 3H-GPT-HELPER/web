@@ -11,78 +11,53 @@
 
 <body>
     <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
-    role="banner" class="navigation w-nav">
-    <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}" width="65" alt="" class="logo-image" /></a>
-    </div>
+        role="banner" class="navigation w-nav">
+        <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}"
+                    width="65" alt="" class="logo-image" /></a>
+        </div>
+        <div class="navigation-wrap">
+            <a href="/about/" class="navigation-item w-nav-link">About</a>
+            <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
+        </div>
     </div>
 
     <div class="w-users-userformpagewrap">
-        <div class="w-users-usersignupformwrapper">
-            <div tabindex="-1" class="w-users-userformsuccessstate w-form-success">
-                <p>Your account was created successfully. You will be redirected shortly.</p>
-                <div data-wf-user-form-redirect=""><a href="/" class="w-inline-block">If nothing happens, click here.</a></div>
-            </div>
-            <form method="post" data-wf-user-form-type="signup">
-            {% csrf_token %}
-                <div class="w-users-userformheader">
-                    <h2>Sign up</h2>
-                </div>
+    <form action="" method="POST">
+        <h2 class="w-users-userformheader">SIGNUP</h2>
+        <!--action부분에 백엔드 url삽입-->
+        {% csrf_token %}
 
-                <label for="Email">Email</label>
-                <input type="email" maxlength="256" placeholder="" name="Email" id="wf-sign-up-email" class="w-input" autoComplete="username" required=""
-                    data-wf-user-form-input-type="email" />
-                    
-                <label for="Name">Name</label>
-                <input type="text" class="w-input" maxlength="256" name="Name" data-name="" data-wf-user-field="wf-user-field-name"
-                placeholder="" fieldType="data-wf-user-field-type" id="wf-sign-up-name" required="" />
-                    
-                <label for="Password">Password</label>
-                <input type="password" data-name="" maxlength="256" placeholder="" name="Password" id="wf-sign-up-password" class="w-input" required=""
-                data-wf-user-form-input-type="password" />
-                
-                <!-- <label class="w-checkbox">
-                <input type="checkbox" class="w-checkbox-input" name="" data-name="" data-wf-user-field="wf-user-field-accept-privacy"
-                    placeholder="" id="wf-sign-up-accept-privacy" required="" />
-                <span class="w-form-label">By creating an account, I agree to this website&#x27;s <a href="#" class="w-inline-block">privacy
-                    policy</a> and <a href="#" class="w-inline-block">terms of service</a></span></label>
-                    
-                <label class="w-checkbox">   
-                <input type="checkbox" class="w-checkbox-input" name="" data-name=""
-                    data-wf-user-field="wf-user-field-accept-communications" placeholder=""
-                    id="wf-sign-up-accept-communications" required="" />
-                <span class="w-form-label">I consent to
-                    receive marketing emails.</span></label> -->
-                    
-                <input type="submit" value="Sign Up" data-wait="Please wait..." class="w-users-userformbutton submit-button w-button" />
+            <label>Username</label>
+            <input class="w-input" type="text" name="username" />
+            <!--{{ form.username }}-->
+            <!-- <button id="isonlyid" type="button" onclick="" data-bs-toggle="modal" data-bs-target="#wrong_idform">아이디 중복</br> 확인</button> -->
+            <!-- <span class="id_explain">6자이상 20자 이하의 영문,숫자만 가능</span> -->
 
-                <div class="w-users-userformfooter"><span>Already have an account?</span><a href="/login"
-                        class="w-inline-block">Log In</a></div>
-            </form>
+
+            <label>Password</label>
+            <input class="w-input" type="password" name="password1" />
+            <!--{{ form.password1 }}-->
+            <!-- <span class="pw1_explain">8자 이상 15자 이하의 영문,숫자만 가능</span> -->
+
+
+            <label>Retype Password</label>
+            <input class="w-input" type="password" name="password2" />
+            <!--{{ form.password2 }}-->
+            <!-- <span class="pw2_explain">비밀번호가 일치합니다</span> -->
+            <!--분기처리 필요 / 비밀번호 일치하면 위 내용을, 불일치면 '동일한 비밀번호를 입력해주세요' 출력-->
+
+            <label>E-Mail</label>
+            <!--{{ form.email_address }}-->
+            <input class="w-input" type="email" name="email" placeholder="chatGptHelper@example.com" />
+
+            <button id="signup_btn" type="submit" onclick="" ref="/" data-bs-toggle="modal" data-bs-target="#howorder" class="w-users-userformbutton submit-button w-button">SUBMIT</button>
             
-            <div style="display:none" data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
-                <div class="user-form-error-msg"
-                    wf-signup-form-general-error-error="There was an error signing you up. Please try again, or contact us if you continue to have problems."
-                    wf-signup-form-not-allowed-error="You&#x27;re not allowed to access this site, please contact the admin for support."
-                    wf-signup-form-invalid-email-error="Make sure your email exists and is properly formatted (e.g., user@domain.com)."
-                    wf-signup-form-email-already_exist-error="An account with this email address already exists. Log in or reset your password."
-                    wf-signup-form-use-invite_email-error="Use the same email address your invitation was sent to."
-                    wf-signup-form-invalid-password-error="Your password must be at least 8 characters."
-                    wf-signup-form-not-verified-error="We couldn&#x27;t verify your account. Please try again, or contact us if you continue to have problems."
-                    wf-signup-form-expired-token-error="This link has expired. A new link has been sent to your email. Please try again, or contact us if you continue to have problems."
-                    wf-signup-form-validation-failed-error="There was an error in some of the information provided.">
-                    There was an error signing you up. Please try again, or contact us if you continue to have problems.
-                </div>
-            </div>
-            <div tabindex="-1" class="w-users-usersignupverificationmessage w-form-verification"
-                data-wf-user-form-verification="true">
-                <div class="w-users-userformheader">
-                    <img src="https://uploads-ssl.webflow.com/img/email-72.67fa6be437.svg" loading="lazy" alt="" />
-                    <h2>Verification Required</h2>
-                </div>
-                <p>Account verification required. Please check your email to find your unique verification link.</p>
-            </div>
-        </div>
+            <div class="w-users-userformfooter"><span>Already have an account?</span><a href="/login/"
+                class="w-inline-block">Login</a></div>
+        </form>
+
     </div>
+
 </body>
 
 </html>

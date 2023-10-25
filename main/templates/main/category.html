@@ -9,13 +9,20 @@
 </head>
 
 <body>
+  <style>
 
-  <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+  </style>
+
+    <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
     role="banner" class="navigation w-nav">
     <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}"
-          width="65" alt="" class="logo-image" /></a>
+            width="65" alt="" class="logo-image" /></a>
     </div>
-  </div>
+    <div class="navigation-wrap">
+    <a href="/about/" class="navigation-item w-nav-link">About</a>
+    <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
+    </div>
+    </div>
 
   <div class="section">
     <div class="container cc-heading-wrap">
@@ -27,73 +34,42 @@
             <button class="button-74" role="button"
               onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
             {%endfor%}
+            <!-- <button id="output1" class="button-74"></button> -->
             
           <!-- 기존꺼 -->
           <!-- {%for category in userCategories %}
             <button class="topic-buttons" onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
           {%endfor%} -->
+
+          <!-- entity 생성위한 form -->
+          <form id="add-category-form" method="post" action="{% url 'category' %}">
+            {% csrf_token %}
+            <input type="text" id="new-keyword-input" class="input-54" name="new_category" placeholder="Enter new category">
+            <button type="submit" class="button-54">Add</button>
+        </form>
+
+          <!-- <input type="text" id="new-keyword-input" class="input-54" placeholder="Enter new category">
+          <button id="add-button" class="button-54">Add</button> -->
+      
+
           </div>
 
-          
+          <script>
+            const text1 = document.getElementById('new-keyword-input');
+            const add1 = document.getElementById('add-button');
+            const out1 = document.getElementById('output1');
 
-          <input type="text" id="new-keyword-input" placeholder="Enter a new keyword">
-          <button id="add-button">Add New Category</button>
+            function fun1() {
+              out1.innerHTML = text1.value; //Take value in textbox and turn it into html output
+            }
+
+            add1.addEventListener('click', fun1);
+
+          </script>
 
       </div>
     </div>
   </div>
-
-  <input id="readInput">
-  <button src="{% static 'img/plus.png' %}" onclick="myText()"></button>
-
-  <p id="demo"></p>
-
-  <script>
-    function myText(){
-    var x = document.getElementById("myText").value;
-    document.getElementById("demo").innerHTML = x;}
-  </script> 
-
-  <script>
-    // Function to add a new button based on user input
-    function addNewButton() {
-      var newKeyword = document.getElementById("new-keyword-input").value;
-
-      // Ensure that a valid keyword has been entered
-      if (newKeyword.trim() !== '') {
-        var container = document.getElementById("button-container");
-
-        // Create a new button element
-        var newButton = document.createElement("button");
-        newButton.className = "button-74";
-        newButton.innerHTML = newKeyword;
-
-        // Define an onclick function to navigate based on the keyword
-        newButton.onclick = function() {
-          navigate(newKeyword);
-        };
-
-        // Append the new button to the container
-        container.appendChild(newButton);
-
-        // Clear the input field
-        document.getElementById("new-keyword-input").value = '';
-      }
-    }
-
-    // Function to navigate based on a keyword
-    function navigate(keyword) {
-      // You can construct the URL using keyword and userKeywords_id
-      var userKeywords_id = /* Look up the userKeywords_id based on the keyword */;
-      var url = "/category/" + userKeywords_id;
-
-      // Redirect to the generated URL
-      window.location.href = url;
-    }
-
-    // Add an event listener to the "Add Button" button
-    document.getElementById("add-button").addEventListener("click", addNewButton);
-  </script>
 
 </body>
 

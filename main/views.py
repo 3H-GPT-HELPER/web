@@ -38,76 +38,29 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
-
-def index(request):
-    users = User.objects.all()
-
-    for user in users:
-        print(user.email)
-
-    return render(request,'main/index.html')
-
-# def signup(request):
-
-#     if request.method == "POST":
-#         email = request.POST['Email']
-#         username = request.POST['Name']
-#         password = request.POST['Password']
-
-#         myuser = User.objects.create_user(email, username, password)
-#         print(myuser.password)
-#         #myuser = User.objects.create(username=username, password=make_password(password),email=email)
-        
-
-#         myuser.save()
-
-#         messages.success(request, "Your account has been successfully created.")
-
-#         return redirect('/')
-
-#     return render(request,"main/signup.html")
-
 from .extract_topic import *
 
 fullanswer_str=""
 answer_str=""
 answer_list=[]
 answer_list=deque(answer_list)
+authenticated=False
+username=""
 
 def signup(request: HttpRequest, *args, **kwargs):
     if request.method=='POST':
-        #form = SignupForm(request.POST)
-
         username = request.POST.get('username')
         email=request.POST.get('email')
         password = request.POST.get('password2')
-
-        
-        
-        # user2=Users(username=username,
-        #                 email=userEmail,
-        #                 password=password)
-
-        #user=form.save()
         user=User.objects.create_user(email=email, username=username, password=password)
-        print(user.username,email,user.password)
+        #print(user.username,email,user.password)
         user.save()
-
-
-            #auth_login(request,user)
         return redirect('/')
-        
-        
-        # if form.is_valid():
             
     
     else:
         form=SignupForm()
-        return render(request,"main/signup2.html",{"form":form})
-
-
-# def login(request):
-#     return render(request, 'main/login2.html')
+        return render(request,"main/signup.html",{"form":form})
 
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -125,22 +78,19 @@ def login(request):
         if user is not None:
             auth.login(request,user)
             print("login success")
-    
             return render(request,"main/login_success.html")
 
         else:
-            print("try again")
+            print("login failed")
             return render(request, 'main/login.html')
 
     else:
-        #return render(request, 'user/login.html', context)
         return render(request, 'main/login.html')
 
 from django.contrib.auth import logout as auth_logout
 def logout(request):
     auth_logout(request)
-
-    return render(request,'main/logout_success.html')
+    return redirect('/')    
 
 def signout (request):
     logout(request)
@@ -158,16 +108,28 @@ def main(request):
     
     userContents=Content.objects.filter(userName="hw")
     context={'contents':userContents}
-    #preprocessing(userContents)
-
     
     return render(request, 'main/main.html',context=context)
 
 def category(request):
+    ##
+    if request.method == 'POST':
+        new_category = request.POST.get('new_category')
+        if new_category:
+            print("category add !",request.user.username)
+            # UserCategory(inserted_category = category,user_id=request.user)
+            new=UserCategory.objects.create(inserted_category=new_category, user_id=request.user)
+            new.save()
+            #return JsonResponse({'message': 'Category added successfully'})
+            #redirect('/')
+            return redirect('category') 
+        else:
+            return JsonResponse({'message': 'Category name is required'}, status=400)
+    ##
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
 
     print("category!!!",request.user.username) #잘 나옴
-    print("user",request.user)
+    #print("user",request.user)
     #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     context={'userCategories':userCategories}
 
@@ -189,13 +151,25 @@ def category_detail(request,pk):
 
     return render(request,'main/detail.html',context=context)
 
+from django.http import JsonResponse
 @csrf_exempt
 def proxy(request):
+    if request.method=='GET':
+        print("authenticated test2",authenticated)
+        if authenticated:
+            print("chrome login check:",username)
+            return JsonResponse({'authenticated': 'True', 'username': username})
+        else:
+            print("not login,,,,")
+            return JsonResponse({'authenticated': 'False'})
+        
     if request.method == 'POST':    
         try:
             data=json.loads(request.body.decode('utf-8'))
             answer=data['pTagContents']
             full_answer=data['complexContents']
+            question_text=data['questionText']
+            print(question_text)
 
             global fullanswer_str
             global answer_str
@@ -206,14 +180,8 @@ def proxy(request):
 
             answer_list.append(fullanswer_str)
             #request.session['received_data'] = fullanswer_str
-            print("?!",request.user.username)
-            print("160answer_str: ", answer_str) #잘 나옴
-
-            # new_request = HttpRequest()
-            # new_request.method = 'GET'
-
-            #add_contents(new_request,fullanswer_str)
-           
+            #print("?!",request.user.username)
+            #print("160answer_str: ", answer_str) #잘 나옴
 
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')
@@ -224,31 +192,31 @@ def proxy(request):
     return JsonResponse({'error': 'Invalid request method'})
 
 def index(request):
-    # users = User.objects.all()
-
-    # for user in users:
-    #     print(user.email)
-    print("user test1:",request.user.username)
+    if request.user.is_authenticated:
+        global authenticated
+        authenticated=True          
+        #print("authenticated test1",authenticated)
+        global username
+        username=request.user.username
+        #print("user test1:",request.user.username)
 
     global fullanswer_str
     global answer_str
 
-    print("206answer_str: ", answer_str)
+    #print("206answer_str: ", answer_str)
     
     while answer_list:
+        print("answer_list test",len(answer_list))
         fullanswer_str=answer_list.popleft()
+        print("\n????",fullanswer_str)
         if fullanswer_str[0:3]=='new':
-            print("if fullanswer_str")
+            #print("if fullanswer_str")
             fullanswer_str=fullanswer_str[3:]
             add_contents(request,fullanswer_str)
-            
-            #return_dic = cal_similarity(request, answer_str) #??
-            #print(return_dic)
-
     
     return render(request,'main/index.html')
 
-def add_contents(request,fullanswer_str):
+def add_contents(request,answer_str):
     
     print("user test:",request.user.username)
     
@@ -282,6 +250,8 @@ def add_contents(request,fullanswer_str):
             print("except")
     else:
         print("no uc category")
+
+    print("entity생성 전 category 확인",category)
     
     #content entity 생성 
     content=Content(answer=fullanswer_str,
@@ -289,7 +259,6 @@ def add_contents(request,fullanswer_str):
                     topics=topics,
                     inserted_category=uc)
                    
-    
     content.save()
 
     return

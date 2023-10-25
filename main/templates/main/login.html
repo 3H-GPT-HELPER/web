@@ -35,22 +35,23 @@
         <h2 class="w-users-userformheader">LOGIN</h2>
         {% csrf_token %}
         {% include "user/form_errors.html" %}
-        <div class="mb-3">
-            <label for="username">Username</label>
-            <input type="text" class="w-input" name="username" id="username"
-                value="{{ form.username.value|default_if_none:'' }}">
-        </div>
-        <div class="mb-3">
-            <label for="userEmail">E-Mail</label>
-            <input type="text" class="w-input" name="userEmail" id="userEmail"
-                value="{{ form.userEmail.value|default_if_none:'' }}">
-        </div>
-        <div class="mb-3">
-            <label for="password">Password</label>
-            <input type="password" class="w-input" name="password" id="password"
-                value="{{ form.password.value|default_if_none:'' }}">
-        </div>
-        <button type="submit" class="w-users-userformbutton submit-button w-button">LOGIN</button>
+
+        <label for="username">Username</label>
+        <input type="text" class="w-input" name="username" id="username"
+            value="{{ form.username.value|default_if_none:'' }}">
+
+        <label for="userEmail">E-Mail</label>
+        <input type="text" class="w-input" name="userEmail" id="userEmail"
+            value="{{ form.userEmail.value|default_if_none:'' }}">
+
+        <label for="password">Password</label>
+        <input type="password" class="w-input" name="password" id="password"
+            value="{{ form.password.value|default_if_none:'' }}">
+
+        <button type="submit" class="w-users-userformbutton submit-button w-button">SUBMIT</button>
+
+        <div class="w-users-userformfooter"><span>Didn't have an account?</span><a href="/signup/"
+            class="w-inline-block">Signup</a></div>
     </form>
 
     <div style="display:none" data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
@@ -59,7 +60,6 @@
             wf-login-form-invalid-email_or_password-error="Invalid email or password. Please try again.">
             We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have
             problems.</div>
-    </div>
 </div>
 {% endblock %}
 
