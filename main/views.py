@@ -2,8 +2,6 @@ from django.shortcuts import render,redirect,reverse
 from django.http import JsonResponse
 from django.http import HttpResponseBadRequest,HttpResponseRedirect
 from django.middleware.csrf import get_token
-
-
 from httpx import Auth
 from django.contrib import auth
 from .forms import SignupForm
@@ -40,8 +38,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from .extract_topic import *
 
-fullanswer_str=""
-answer_str=""
 answer_list=[]
 answer_list=deque(answer_list)
 
@@ -117,20 +113,11 @@ def main(request):
 def category(request):
 
     #chat gpt사이트에서 받아온 답변들 추가하는 코드
-    global fullanswer_str
-    global answer_str
-
+    
     while answer_list:
-        print(question_list)
-        
         fullanswer_str=answer_list.popleft()
         question_str=question_list.popleft()
-
-        print("\n????",question_str)
-        if fullanswer_str[0:3]=='new':
-            #print("if fullanswer_str")
-            fullanswer_str=fullanswer_str[3:]
-            add_contents(request,fullanswer_str,question_str)
+        add_contents(request,fullanswer_str,question_str)
 
     ## category 새로 생성시 코드
     if request.method == 'POST':
@@ -152,16 +139,13 @@ def category(request):
     return render(request,"main/category.html",context=context)
 
 def category_detail(request,pk):
-    print("category_detail!!!",request.user.username) #잘 나옴
-    print("pk",pk)
-
     #category_id는 자동생성 및 전달되는 pk
     uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
     print('uc: ', uc.inserted_category)
+    
     uc_name=uc.inserted_category
     category_id=pk
 
-    print(uc_name,category_id)
     userContents=Content.objects.filter(inserted_category__inserted_category=uc_name,user_id__username=request.user.username)
     context={'contents':userContents,'category_id':category_id}
 
@@ -188,11 +172,8 @@ def proxy(request):
             full_answer=data['complexContents']
             question_text=data['questionText']
             
-            global fullanswer_str
-            global answer_str
-            
-            answer_str = ''.join(answer) #text만 있는 답변
-            fullanswer_str='new'
+            fullanswer_str=""
+            #answer_str = ''.join(answer) #text만 있는 답변
             fullanswer_str += ''.join(full_answer) #코드까지 합쳐진 답변
 
             answer_list.append(fullanswer_str)
@@ -250,7 +231,7 @@ def add_contents(request,answer_str,question_str):
     print("entity생성 전 category 확인",category)
     
     #content entity 생성 
-    content=Content(answer=fullanswer_str,
+    content=Content(answer=answer_str,
                     user_id=request.user,
                     question=question_str,
                     topics=topics,
