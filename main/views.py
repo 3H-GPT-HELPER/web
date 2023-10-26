@@ -44,6 +44,10 @@ fullanswer_str=""
 answer_str=""
 answer_list=[]
 answer_list=deque(answer_list)
+
+question_list=[]
+question_list=deque(question_list)
+
 authenticated=False
 username=""
 
@@ -56,8 +60,7 @@ def signup(request: HttpRequest, *args, **kwargs):
         #print(user.username,email,user.password)
         user.save()
         return redirect('/')
-            
-    
+        
     else:
         form=SignupForm()
         return render(request,"main/signup.html",{"form":form})
@@ -112,25 +115,38 @@ def main(request):
     return render(request, 'main/main.html',context=context)
 
 def category(request):
-    ##
+
+    #chat gpt사이트에서 받아온 답변들 추가하는 코드
+    global fullanswer_str
+    global answer_str
+
+    while answer_list:
+        print(question_list)
+        
+        fullanswer_str=answer_list.popleft()
+        question_str=question_list.popleft()
+
+        print("\n????",question_str)
+        if fullanswer_str[0:3]=='new':
+            #print("if fullanswer_str")
+            fullanswer_str=fullanswer_str[3:]
+            add_contents(request,fullanswer_str,question_str)
+
+    ## category 새로 생성시 코드
     if request.method == 'POST':
         new_category = request.POST.get('new_category')
         if new_category:
             print("category add !",request.user.username)
-            # UserCategory(inserted_category = category,user_id=request.user)
             new=UserCategory.objects.create(inserted_category=new_category, user_id=request.user)
             new.save()
-            #return JsonResponse({'message': 'Category added successfully'})
-            #redirect('/')
+            
             return redirect('category') 
         else:
             return JsonResponse({'message': 'Category name is required'}, status=400)
+    
     ##
     userCategories=UserCategory.objects.filter(user_id__username=request.user.username)
 
-    print("category!!!",request.user.username) #잘 나옴
-    #print("user",request.user)
-    #userCategories=UserCategory.objects.filter(user_id__user_id=request.user.user_id)
     context={'userCategories':userCategories}
 
     return render(request,"main/category.html",context=context)
@@ -166,11 +182,12 @@ def proxy(request):
     if request.method == 'POST':    
         try:
             data=json.loads(request.body.decode('utf-8'))
+            
+            #chat gpt 사이트로 부터 질문, 답변 jsonresponse 받기
             answer=data['pTagContents']
             full_answer=data['complexContents']
             question_text=data['questionText']
-            print(question_text)
-
+            
             global fullanswer_str
             global answer_str
             
@@ -179,44 +196,23 @@ def proxy(request):
             fullanswer_str += ''.join(full_answer) #코드까지 합쳐진 답변
 
             answer_list.append(fullanswer_str)
-            #request.session['received_data'] = fullanswer_str
-            #print("?!",request.user.username)
-            #print("160answer_str: ", answer_str) #잘 나옴
-
+            question_list.append(question_text)
+            
         except json.JSONDecodeError:
             return HttpResponseBadRequest('invalid json data')
         
-        
-        print("main으로 보내버려~")
-
     return JsonResponse({'error': 'Invalid request method'})
 
 def index(request):
     if request.user.is_authenticated:
         global authenticated
         authenticated=True          
-        #print("authenticated test1",authenticated)
         global username
         username=request.user.username
-        #print("user test1:",request.user.username)
-
-    global fullanswer_str
-    global answer_str
-
-    #print("206answer_str: ", answer_str)
-    
-    while answer_list:
-        print("answer_list test",len(answer_list))
-        fullanswer_str=answer_list.popleft()
-        print("\n????",fullanswer_str)
-        if fullanswer_str[0:3]=='new':
-            #print("if fullanswer_str")
-            fullanswer_str=fullanswer_str[3:]
-            add_contents(request,fullanswer_str)
-    
+            
     return render(request,'main/index.html')
 
-def add_contents(request,answer_str):
+def add_contents(request,answer_str,question_str):
     
     print("user test:",request.user.username)
     
@@ -256,6 +252,7 @@ def add_contents(request,answer_str):
     #content entity 생성 
     content=Content(answer=fullanswer_str,
                     user_id=request.user,
+                    question=question_str,
                     topics=topics,
                     inserted_category=uc)
                    
@@ -294,7 +291,6 @@ def preprocessing_kr(data):
 '''
     
 
-#둘다 리스트로 보내서 돌려봐요,,
 def get_category(top_features):
     selected_category=""
     userkeywords_set=UserCategory.objects.filter(user_id__name='hw')
