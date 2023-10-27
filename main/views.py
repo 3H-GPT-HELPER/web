@@ -88,6 +88,8 @@ def login(request):
 
 from django.contrib.auth import logout as auth_logout
 def logout(request):
+    global authenticated
+    authenticated=False
     auth_logout(request)
     return redirect('/')    
 
