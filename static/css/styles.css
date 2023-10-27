@@ -3522,3 +3522,7 @@ figcaption {
 
 .button.cc-white-button:active {
   background-color: rgba(255, 2)}
+
+.category-name{
+  font-size: 30px;
+}

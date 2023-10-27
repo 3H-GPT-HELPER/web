@@ -149,7 +149,7 @@ def category_detail(request,pk):
     category_id=pk
 
     userContents=Content.objects.filter(inserted_category__inserted_category=uc_name,user_id__username=request.user.username)
-    context={'contents':userContents,'category_id':category_id}
+    context={'contents':userContents,'category_id':category_id,'category_name':uc_name}
 
     return render(request,'main/detail.html',context=context)
 
