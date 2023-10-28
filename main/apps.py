@@ -16,4 +16,4 @@ class ModelConfig(AppConfig):
     #      pooler_type=pooler_type,
     #      pre_seq_len=pre_seq_len)
     
-    test_model = joblib.load('/Users/ohbom/Downloads/model.pkl')
+    test_model = joblib.load(r'C:\Users\nurul\Downloads\model.pkl')

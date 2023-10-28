@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
     <title>Login Success</title>
 </head>
 
 <style>
     body {
     text-align: center;
-    padding: 40px 0;
     background: #fffff0;}
 
     h1 {
@@ -21,7 +21,7 @@
     margin-bottom: 10px;}
 
     p {
-    color: #ffe5b4;
+    color: #d2b48c;
     font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
     font-size:20px;
     margin: 0;}
@@ -43,14 +43,14 @@
 
 <body>
     <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
-    role="banner" class="navigation w-nav">
-    <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}"
-                width="65" alt="" class="logo-image" /></a>
-    </div>
-    <div class="navigation-wrap">
-        <a href="/about/" class="navigation-item w-nav-link">About</a>
-        <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
-    </div>
+        role="banner" class="navigation w-nav">
+        <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}"
+                    width="65" alt="" class="logo-image" /></a>
+        </div>
+        <div class="navigation-wrap">
+            <a href="/about/" class="navigation-item w-nav-link">About</a>
+            <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
+        </div>
     </div>
 
     <div class="card">
@@ -60,8 +60,6 @@
         <h1>Success</h1>
         <p>Hai {{request.user.username}}<br>
             Email:{{request.user.email}}</p>
-        <br>
-        <a href="/">HOME</a>
     </div>
 </body>
 </html>
