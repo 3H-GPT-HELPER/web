@@ -173,6 +173,10 @@ def proxy(request):
             answer=data['pTagContents']
             full_answer=data['complexContents']
             question_text=data['questionText']
+
+            #question_str에 1/1 포함되있는 경우 없애기
+            if question_text[0]=='1':
+                question_text=question_text[5:]
             
             fullanswer_str=""
             #answer_str = ''.join(answer) #text만 있는 답변
