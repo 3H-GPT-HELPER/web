@@ -20,7 +20,6 @@ from bertopic import BERTopic
 
 import pandas as pd
 
-
 import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
@@ -42,13 +41,13 @@ def extract_topic(answer):
     lda_topic = get_topics(lda_model.components_,vectorizer.get_feature_names_out())
     lda_topics= '/'.join(lda_topic)
     
-    print("lda_topics:",lda_topics)
+    #print("lda_topics:",lda_topics)
     
     #bertopic
-    bertopic_model = BERTopic(language="english", calculate_probabilities=True, verbose=True)
-    bertopics, probs = bertopic_model.fit_transform(X)
-    freq = bertopic_model.get_topic_info()
-    bertopic_model.get_topic(0)
+    #bertopic_model = BERTopic(language="english", calculate_probabilities=True, verbose=True)
+    #bertopics, probs = bertopic_model.fit_transform(X)
+    #freq = bertopic_model.get_topic_info()
+    #bertopic_model.get_topic(0)
         
     return lda_topics
 

@@ -206,7 +206,7 @@ def add_contents(request,answer_str,question_str):
     uc = ""
     
     return_dic = cal_similarity(request,answer_str)
-    print(return_dic)
+    #print(return_dic)
     
     if 'existed' in return_dic:
         category = return_dic.get('existed')
@@ -246,21 +246,6 @@ def add_contents(request,answer_str,question_str):
     content.save()
 
     return
-            
-    
-    
-def preprocessing_eng(data):
-    tokenized = data['answer'].apply(lambda x: [word for word in x if len(word) > 2])
-    detokenized = []
-    for i in range(len(data)):
-        t = ' '.join(tokenized[i])
-        detokenized.append(t)
-    context = detokenized
-    #stop_words_list = stopwords.words('english')
-    vectorizer = TfidfVectorizer(stop_words='english',max_features=10)
-    X = vectorizer.fit_transform(context)
-    
-    return X, vectorizer 
     
 '''
 def preprocessing_kr(data):
