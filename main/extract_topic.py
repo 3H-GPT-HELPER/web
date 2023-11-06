@@ -16,6 +16,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize 
+from bertopic import BERTopic
 
 import pandas as pd
 
@@ -34,13 +35,22 @@ def extract_topic(answer):
     #else:
     #    X, vectorizer = preprocessing_kr(data)
     
+    #lda
     lda_model = LatentDirichletAllocation(n_components=1, learning_method='online', random_state=777, max_iter=3)
     lda_top = lda_model.fit_transform(X)
     
-    topic = get_topics(lda_model.components_,vectorizer.get_feature_names_out())
-    topics= '/'.join(topic)
+    lda_topic = get_topics(lda_model.components_,vectorizer.get_feature_names_out())
+    lda_topics= '/'.join(lda_topic)
     
-    return topics
+    print("lda_topics:",lda_topics)
+    
+    #bertopic
+    bertopic_model = BERTopic(language="english", calculate_probabilities=True, verbose=True)
+    bertopics, probs = bertopic_model.fit_transform(X)
+    freq = bertopic_model.get_topic_info()
+    bertopic_model.get_topic(0)
+        
+    return lda_topics
 
 def get_topics(components, feature_names, n=3):
     topic = []

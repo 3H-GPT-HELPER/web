@@ -8,14 +8,6 @@ class MainConfig(AppConfig):
     name = "main"
 
 class ModelConfig(AppConfig):
-    #model_name_or_path = 'YuxinJiang/unsup-promcse-bert-base-uncased'
-    #pooler_type = 'cls_before_pooler'
-    #pre_seq_len = 16
-
-    #model = PromCSE(model_name_or_path=model_name_or_path, 
-    #      pooler_type=pooler_type,
-    #      pre_seq_len=pre_seq_len)
-    
-    test_model = joblib.load(r'C:\Users\nrul\Downloads\model.pkl')
+    test_model = joblib.load(r'/Users/hgy/Desktop/model.pkl')
     #huda: C:\Users\nrul\Downloads\model.pkl
     #hw: /Users/ohbom/Downloads/model.pkl
