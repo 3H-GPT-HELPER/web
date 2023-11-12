@@ -11,5 +11,6 @@ class Content(models.Model):
     topics=models.TextField(default="",null=True)
 
     inserted_category=models.ForeignKey(UserCategory,on_delete=models.SET_NULL, null=True)
+    sub_categories=models.JSONField(default={})
     #selected_category=models.CharField(max_length=32,null=True)
     
