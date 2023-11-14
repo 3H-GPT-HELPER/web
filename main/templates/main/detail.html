@@ -19,23 +19,36 @@
     </div>
   </div>
 
-  <div class="section container detail-1">
+  <div class="section container">
 
-    <div class="category-name">
+    <div class="detail-subheader">
       {{category_name}}
     </div>
     {%for content in contents%}
 
-    <div class="detail-subheader">
+    <div class="detail-keyword">
       Selected keywords: {{content.topics}}
     </div>
 
-    <div class="detail-p">
-      Question:<br>{{content.question}}
+    <div class="flex-container">
+      <div class="detail-box-q">
+        Q
+      </div>
+
+      <div class="detail-q flex-child">
+        {{content.question}}
+      </div>
     </div>
-    <br>
-    <div class="detail-p">
-      Answers:<br> {{content.answer}}
+
+
+    <div class="flex-container">
+      <div class="detail-box-a">
+        A
+      </div>
+
+      <div class="detail-a flex-child">
+        {{content.answer}}
+      </div>
     </div>
     
     {%endfor%}
