@@ -217,6 +217,8 @@ def add_contents(request,answer_str,question_str):
         topic_arr = topics.split("/")
         #category = get_category(topic_arr) <- 이 부분 확인 필요
         category = topic_arr[0]
+        print("\ntopic arr",topic_arr)
+        sub_categories=topic_arr[1:]
         print("category is ", category)
         
         try:
@@ -241,7 +243,8 @@ def add_contents(request,answer_str,question_str):
                     user_id=request.user,
                     question=question_str,
                     topics=topics,
-                    inserted_category=uc)
+                    inserted_category=uc,
+                    sub_categories=sub_categories)
                    
     content.save()
 
