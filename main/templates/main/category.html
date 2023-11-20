@@ -35,13 +35,7 @@
             <button class="button-74" role="button"
               onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
             {%endfor%}
-            <!-- <button id="output1" class="button-74"></button> -->
-            
-          <!-- 기존꺼 -->
-          <!-- {%for category in userCategories %}
-            <button class="topic-buttons" onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
-          {%endfor%} -->
-
+           
           <!-- entity 생성위한 form -->
           <form id="add-category-form" method="post" action="{% url 'category' %}" style="padding: 20px;">
             {% csrf_token %}
