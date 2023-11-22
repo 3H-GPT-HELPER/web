@@ -4,7 +4,7 @@
 <html>
 
 <head>
-  <title>Category</title>
+  <title>Sub Category of {{inserted_category}}</title>
   <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
   <link rel="icon" href="{% static 'img/logo.ico' %}" type="image/x-icon"> 
 </head>
@@ -20,7 +20,6 @@
             width="65" alt="" class="logo-image" /></a>
     </div>
     <div class="navigation-wrap">
-    <a href="/community/" class="navigation-item w-nav-link">Community</a>
     <a href="/about/" class="navigation-item w-nav-link">About</a>
     <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
     </div>
@@ -28,32 +27,18 @@
 
   <div class="section">
     <div class="container cc-heading-wrap">
-      <h1 class="heading-5">Category</h1>
+      <h1 class="heading-5">SubCategory of {{category_name}}</h1>
       <div class="store-categories-wrap">
 
           <div class="collection-wrap">
-            {%for category in userCategories %}
+            {%for category in subCategories %}
             <button class="button-74" role="button"
-              onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
-
-              <button class="button-74" role="button"
-              onclick="location.href='/category/{{category.pk}}/subcategory/'">test: {{category.inserted_category}}</button>
+              onclick="location.href='/subcategory/{{category.pk}}/'">{{category.sub_category}}</button>
             {%endfor%}
-           
-          <!-- entity 생성위한 form -->
-          <form id="add-category-form" method="post" action="{% url 'category' %}" style="padding: 20px;">
-            {% csrf_token %}
-            <input type="text" id="new-keyword-input" class="input-54" name="new_category" placeholder="Enter new category">
-            <button type="submit" class="button-54">Add</button>
-        </form>
-
-          <!-- <input type="text" id="new-keyword-input" class="input-54" placeholder="Enter new category">
-          <button id="add-button" class="button-54">Add</button> -->
-      
 
           </div>
 
-          <script>
+          <!-- <script>
             const text1 = document.getElementById('new-keyword-input');
             const add1 = document.getElementById('add-button');
             const out1 = document.getElementById('output1');
@@ -64,7 +49,7 @@
 
             add1.addEventListener('click', fun1);
 
-          </script>
+          </script> -->
 
       </div>
     </div>
