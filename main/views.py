@@ -215,9 +215,9 @@ def add_contents(request,answer_str,question_str):
     if 'existed' in return_dic:
         category = return_dic.get('existed')
         uc = UserCategory.objects.get(inserted_category=category)
-        topics = extract_topic(answer_str)
+        topics = extract_topic(question_str+answer_str)
     elif 'new' in return_dic:
-        topics = extract_topic(answer_str)
+        topics = extract_topic(question_str+answer_str)
         topic_arr = topics.split("/")
         #category = get_category(topic_arr) <- 이 부분 확인 필요
         category = topic_arr[0]
@@ -253,38 +253,7 @@ def add_contents(request,answer_str,question_str):
     content.save()
 
     return
-            
     
-    
-def preprocessing_eng(data):
-    tokenized = data['answer'].apply(lambda x: [word for word in x if len(word) > 2])
-    detokenized = []
-    for i in range(len(data)):
-        t = ' '.join(tokenized[i])
-        detokenized.append(t)
-    context = detokenized
-    #stop_words_list = stopwords.words('english')
-    vectorizer = TfidfVectorizer(stop_words='english',max_features=10)
-    X = vectorizer.fit_transform(context)
-    
-    return X, vectorizer 
-    
-'''
-def preprocessing_kr(data):
-    okt = Okt()
-    tokenized = data['answer'].apply(lambda x: [word for word in okt.nouns(x)]) #명사로만 **
-    detokenized = []
-    for i in range(len(data)):
-        t = ' '.join(tokenized[i])
-        detokenized.append(t)
-    context = detokenized
-    vectorizer = TfidfVectorizer(max_features=10)
-    X = vectorizer.fit_transform(context)
-    
-    return X, vectorizer
-'''
-    
-
 def get_category(top_features):
     selected_category=""
     userkeywords_set=UserCategory.objects.filter(user_id__name='hw')

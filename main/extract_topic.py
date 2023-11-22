@@ -17,6 +17,11 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize 
 
+nltk.download('tagsets')
+nltk.download('averaged_perceptron_tagger')
+
+from nltk.tag import pos_tag
+
 import pandas as pd
 
 
@@ -45,13 +50,6 @@ def extract_topic(answer):
 def get_topics(components, feature_names, n=3):
     topic = []
     
-    '''
-    for idx, topic in enumerate(components):
-        print("Topic %d:" % (idx+1),[(feature_names[i], topic[i].round(2)) for i in topic.argsort()[:-n - 1:-1]])
-        #for i in topic.argsort()[:-n - 1:-1] :
-            #print("Topic %d:" % (idx+1),[(feature_names[i], topic[i].round(2)) ])
-            #topic += feature_names[i]
-    '''
     for idx, topic in enumerate(components):
        # top_features = [(feature_names[i], topic[i].round(2)) for i in topic.argsort()[:-n - 1:-1]]
        top_features = [feature_names[i] for i in topic.argsort()[:-n - 1:-1]]
@@ -61,13 +59,21 @@ def get_topics(components, feature_names, n=3):
     return top_features
 
 def preprocessing_eng(data):
-    tokenized = data['answer'].apply(lambda x: [word for word in x if len(word) > 2])
+    stop_words_list = stopwords.words('english')
+    #tokenized = data['answer'].apply(lambda x: [word for word in x if len(word)>2])
+    
+    tokenized = data['answer'].apply(lambda x: [word for word in x if (len(word) > 2 
+                                                                       and word not in stop_words_list 
+                                                                       and pos_tag([word])[0][1]=='NN'
+                                                                       or pos_tag([word])[0][1]=='NNP'
+                                                                       and pos_tag([word])[0][1]!='VB')])
+    
     detokenized = []
     for i in range(len(data)):
         t = ' '.join(tokenized[i])
         detokenized.append(t)
     context = detokenized
-    #stop_words_list = stopwords.words('english')
+    print("detokenized--------",context)
     vectorizer = TfidfVectorizer(stop_words='english',max_features=10)
     X = vectorizer.fit_transform(context)
     
