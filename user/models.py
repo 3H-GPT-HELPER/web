@@ -15,5 +15,7 @@ class UserCategory(models.Model):
     inserted_category=models.CharField(max_length=32)
     user_id=models.ForeignKey(User,on_delete=models.SET_NULL, null=True)
 
-
+class subCategory(models.Model):
+    inserted_category=models.ForeignKey(UserCategory,on_delete=models.SET_NULL, null=True)
+    sub_category=models.CharField(max_length=32)
 

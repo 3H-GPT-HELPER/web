@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import UserCategory
+from .models import UserCategory,subCategory
 from . import models
 
 # class UserAdmin(admin.ModelAdmin):
@@ -16,4 +16,8 @@ from . import models
 class UserKeywordsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(UserCategory,UserKeywordsAdmin)
+
+class UserSubCategoryAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(subCategory,UserSubCategoryAdmin)
 

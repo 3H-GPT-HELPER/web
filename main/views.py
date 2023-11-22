@@ -37,6 +37,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from .extract_topic import *
+from user.models import UserCategory,subCategory
+
+from django.db.models import Q
 
 answer_list=[]
 answer_list=deque(answer_list)
@@ -144,6 +147,27 @@ def category(request):
 
     return render(request,"main/category.html",context=context)
 
+def subcategory(request,pk):
+    
+    uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
+    subcategories=subCategory.objects.filter(inserted_category=uc)
+    
+    context={'category_name':uc.inserted_category,'subCategories':subcategories}
+
+    return render(request,"main/subcategory.html",context=context)
+
+def subcategory_detail(request,pk):
+
+    subuc=subCategory.objects.get(id=pk)
+    contents=Content.objects.filter(Q(sub_category1=subuc.sub_category)|Q(sub_category2=subuc.sub_category))
+    main_category=subuc.inserted_category.inserted_category
+    sub_category=subuc.sub_category
+
+    context={'contents':contents,'main_category':main_category,'sub_category':sub_category
+    }
+
+    return render(request,"main/sub_detail.html",context=context)
+
 def category_detail(request,pk):
     #category_id는 자동생성 및 전달되는 pk
     uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
@@ -248,9 +272,16 @@ def add_contents(request,answer_str,question_str):
                     question=question_str,
                     topics=topics,
                     inserted_category=uc,
-                    sub_categories=sub_categories)
+                    sub_category1=sub_categories[0],
+                    sub_category2=sub_categories[1])
                    
     content.save()
+
+    # sub_category entity 생성
+    sub=subCategory(inserted_category=uc,
+                    sub_category=sub_categories[0])
+    
+    sub.save()
 
     return
     
