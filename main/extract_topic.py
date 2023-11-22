@@ -16,6 +16,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize 
+from nltk.stem import PorterStemmer
 
 nltk.download('tagsets')
 nltk.download('averaged_perceptron_tagger')
@@ -66,7 +67,15 @@ def preprocessing_eng(data):
                                                                        and word not in stop_words_list 
                                                                        and pos_tag([word])[0][1]=='NN'
                                                                        or pos_tag([word])[0][1]=='NNP'
-                                                                       and pos_tag([word])[0][1]!='VB')])
+                                                                       and pos_tag([word])[0][1]!='VB'
+                                                                       )])
+    
+    lmtzr = WordNetLemmatizer()
+    tokenized = data['answer'].apply(lambda x: [lmtzr.lemmatize(word) for word in x])
+    #tokenized = data['answer'].apply(lambda x: [lmtzr.lemmatize(word,'v') for word in x])
+    
+    #stemmer = PorterStemmer()
+    #tokenized = data['answer'].apply(lambda x: [stemmer.stem(word) for word in x])
     
     detokenized = []
     for i in range(len(data)):
