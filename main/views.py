@@ -104,6 +104,10 @@ def about(request):
 def contact(request):
     return render(request, 'main/contact.html')
 
+def community(request):
+    return render(request, 'main/community.html')
+
+
 def main(request):
     print("this is main page")
     

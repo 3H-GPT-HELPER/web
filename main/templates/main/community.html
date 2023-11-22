@@ -1,11 +1,10 @@
 {% load static %}
-{% csrf_token %}
 
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>Detail</title>
+  <title>Community</title>
   <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
   <link rel="icon" href="{% static 'img/logo.ico' %}" type="image/x-icon"> 
 </head>
@@ -18,46 +17,20 @@
       width="65" alt="" class="logo-image" /></a>
     </div>
     <div class="navigation-wrap">
-      <a href="/community/" class="navigation-item w-nav-link">Community</a>
+      <a href="/category/" class="navigation-item w-nav-link">Category</a>
       <a href="/about/" class="navigation-item w-nav-link">About</a>
       <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
       </div>
   </div>
 
-  <div class="section container">
-
-    <div class="detail-subheader">
-      {{category_name}}
-    </div>
-    {%for content in contents%}
-
-    <div class="detail-keyword">
-      Selected keywords: {{content.topics}}
-    </div>
-
-    <div class="flex-container">
-      <div class="detail-box-q">
-        Q
-      </div>
-
-      <div class="detail-q flex-child">
-        {{content.question}}
-      </div>
+  <div class="section">
+    <div class="container cc-heading-wrap">
+      <h1 class="heading-5">Community</h1>
     </div>
 
 
-    <div class="flex-container">
-      <div class="detail-box-a">
-        A
-      </div>
 
-      <div class="detail-a flex-child">
-        {{content.answer}}
-      </div>
-    </div>
-    
-    {%endfor%}
   </div>
-
 </body>
+
 </html>
