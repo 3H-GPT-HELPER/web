@@ -21,6 +21,7 @@ from nltk.tokenize import word_tokenize
 import pandas as pd
 from collections import deque
 
+nltk.download('wordnet')
 nltk.download('punkt')
 nltk.download('stopwords')
 
