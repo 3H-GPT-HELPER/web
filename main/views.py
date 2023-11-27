@@ -179,40 +179,6 @@ def subcategory_detail(request,pk):
 
     return render(request,"main/sub_detail.html",context=context)
 
-def subcategory(request,pk):
-    
-    uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
-    subcategories=subCategory.objects.filter(inserted_category=uc)
-    
-    context={'category_name':uc.inserted_category,'subCategories':subcategories}
-
-    return render(request,"main/subcategory.html",context=context)
-
-def subcategory_detail(request,pk):
-
-    subuc=subCategory.objects.get(id=pk)
-    contents=Content.objects.filter(Q(sub_category1=subuc.sub_category)|Q(sub_category2=subuc.sub_category))
-    main_category=subuc.inserted_category.inserted_category
-    sub_category=subuc.sub_category
-
-    context={'contents':contents,'main_category':main_category,'sub_category':sub_category
-    }
-
-    return render(request,"main/sub_detail.html",context=context)
-
-def category_detail(request,pk):
-    #category_id는 자동생성 및 전달되는 pk
-    uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
-    print('uc: ', uc.inserted_category)
-    
-    uc_name=uc.inserted_category
-    category_id=pk
-
-    userContents=Content.objects.filter(inserted_category__inserted_category=uc_name,user_id__username=request.user.username)
-    context={'contents':userContents,'category_id':category_id,'category_name':uc_name}
-
-    return render(request,'main/detail.html',context=context)
-
 from django.http import JsonResponse
 @csrf_exempt
 def proxy(request):
