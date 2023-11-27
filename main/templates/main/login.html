@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="{% static 'img/logo.ico' %}" type="image/x-icon"> 
+    <script src="{% static 'js/homepage.js' %}"></script>
+    <script src="{% static 'js/kakao.js' %}"></script>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js"
+        integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh"
+        crossorigin="anonymous"></script>
+    <script>
+        Kakao.init('d6100ded4adb9ae94cb7303bae1ce346'); //JAVASCRIPT_KEY
+        console.log(Kakao.isInitialized());
+    </script>
+</head>
+
+<body>
+    <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease"
+        role="banner" class="navigation w-nav">
+        <div class="navigation-items"><a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}"
+                    width="65" alt="" class="logo-image" /></a>
+        </div>
+        <div class="navigation-wrap">
+            <a href="/about/" class="navigation-item w-nav-link">About</a>
+            <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
+        </div>
+    </div>
+
+{% block content %}
+<div class="w-users-userformpagewrap">
+    <form method="post" action="{% url 'main_login' %}">
+        <h2 class="w-users-userformheader">LOGIN</h2>
+        {% csrf_token %}
+        {% include "user/form_errors.html" %}
+
+        <label for="username">Username</label>
+        <input type="text" class="w-input" name="username" id="username"
+            value="{{ form.username.value|default_if_none:'' }}">
+
+        <label for="userEmail">E-Mail</label>
+        <input type="text" class="w-input" name="userEmail" id="userEmail"
+            value="{{ form.userEmail.value|default_if_none:'' }}">
+
+        <label for="password">Password</label>
+        <input type="password" class="w-input" name="password" id="password"
+            value="{{ form.password.value|default_if_none:'' }}">
+
+        <button type="submit" class="w-users-userformbutton submit-button w-button">SUBMIT</button>
+
+        <div class="w-users-userformfooter"><span>Didn't have an account?</span><a href="/signup/"
+            class="w-inline-block">Signup</a></div>
+    </form>
+
+    <div style="display:none" data-wf-user-form-error="true" class="w-users-userformerrorstate w-form-fail">
+        <div class="user-form-error-msg"
+            wf-login-form-general-error-error="We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have problems."
+            wf-login-form-invalid-email_or_password-error="Invalid email or password. Please try again.">
+            We&#x27;re having trouble logging you in. Please try again, or contact us if you continue to have
+            problems.</div>
+</div>
+{% endblock %}
+
+</body>
+
+</html>

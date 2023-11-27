@@ -1,0 +1,71 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{category_name}}</title>
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+  <link rel="icon" href="{% static 'img/logo.ico' %}" type="image/x-icon"> 
+</head>
+
+<body>
+
+  <div data-collapse="medium" data-animation="default" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="navigation w-nav">
+    <div class="navigation-items">
+      <a href="/" class="logo-link w-nav-brand"><img src="{% static 'img/logo.png' %}" width="65" alt="" class="logo-image" /></a>
+    </div>
+
+    <div class="navigation-wrap">
+      <a href="/category/" class="navigation-item w-nav-link">Category</a>
+      <a class="navigation-item w-nav-link"> >></a>
+      <a href="{% url 'subcategory' category_pk %}"class="navigation-item w-nav-link" style="text-decoration: underline;"> {{category_name}}</a>
+      
+      {%for subcategory in subCategories %}
+      <!-- href="/category/{{category.pk}}/subcategory/"  -->
+      <!-- <a href="{% url 'subcategory' category_pk %}"class="navigation-item w-nav-link" style="text-decoration: underline;"> {{category_name}}</a> -->
+      <!-- <a class="navigation-item w-nav-link"> /</a> -->
+      <!-- href='/subcategory/{{category.pk}}/'  -->
+      <!-- <a href="{% url 'sub_detail' subcategory.pk %}" class="navigation-item w-nav-link"> {{subcategory.sub_category}} </a> -->
+      {%endfor%}
+    </div>
+
+    <!-- <div class="navigation-wrap">
+    <a href="/about/" class="navigation-item w-nav-link">About</a>
+    <a href="/contact/"class="navigation-item w-nav-link">Contact</a>
+    </div> -->
+  </div>
+
+  <div class="section">
+    <div class="container cc-heading-wrap">
+      <h3 class="heading-5">{{category_name}}</h3>
+      <div class="store-categories-wrap">
+
+          <div class="collection-wrap">
+            {%for category in subCategories %}
+            <button class="button-74" role="button"
+              onclick="location.href='/subcategory/{{category.pk}}/'">{{category.sub_category}}</button>
+            {%endfor%}
+
+          </div>
+
+          <!-- <script>
+            const text1 = document.getElementById('new-keyword-input');
+            const add1 = document.getElementById('add-button');
+            const out1 = document.getElementById('output1');
+
+            function fun1() {
+              out1.innerHTML = text1.value; //Take value in textbox and turn it into html output
+            }
+
+            add1.addEventListener('click', fun1);
+
+          </script> -->
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
