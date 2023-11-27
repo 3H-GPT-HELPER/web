@@ -19,12 +19,14 @@
     <div class="navigation-wrap">
       <a href="/category/" class="navigation-item w-nav-link">Category</a>
       <a class="navigation-item w-nav-link"> >></a>
-      {%for category in subCategories %}
+      <a href="{% url 'subcategory' category_pk %}"class="navigation-item w-nav-link" style="text-decoration: underline;"> {{category_name}}</a>
+      
+      {%for subcategory in subCategories %}
       <!-- href="/category/{{category.pk}}/subcategory/"  -->
-      <a class="navigation-item w-nav-link" style="text-decoration: underline;"> {{category_name}}</a>
-      <a class="navigation-item w-nav-link"> /</a>
+      <!-- <a href="{% url 'subcategory' category_pk %}"class="navigation-item w-nav-link" style="text-decoration: underline;"> {{category_name}}</a> -->
+      <!-- <a class="navigation-item w-nav-link"> /</a> -->
       <!-- href='/subcategory/{{category.pk}}/'  -->
-      <a class="navigation-item w-nav-link"> {{category.sub_category}} </a>
+      <!-- <a href="{% url 'sub_detail' subcategory.pk %}" class="navigation-item w-nav-link"> {{subcategory.sub_category}} </a> -->
       {%endfor%}
     </div>
 

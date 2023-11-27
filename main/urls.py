@@ -16,10 +16,9 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('main/', views.main, name='main'),
     path('category/',views.category,name="category"),
-    path('category/<int:pk>/subcategory/',views.subcategory,name="subcategory"),
+    path('category/<int:pk>/',views.subcategory,name="subcategory"),
     path('subcategory/<int:pk>/',views.subcategory_detail,name="sub_detail"),
-    
-    path('category/<int:pk>/',views.category_detail,name="detail_page"),
+    #path('category/<int:pk>/',views.category_detail,name="detail_page"),
     path('proxy',views.proxy,name='proxy'),
     path('signout', views.signout, name='signout'),
     path('community/', views.community, name='community'),

@@ -34,11 +34,11 @@
 
           <div class="collection-wrap">
             {%for category in userCategories %}
-            <button class="button-74" role="button"
-              onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
+            <!-- <button class="button-74" role="button"
+              onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button> -->
 
               <button class="button-74" role="button"
-              onclick="location.href='/category/{{category.pk}}/subcategory/'">test: {{category.inserted_category}}</button>
+              onclick="location.href='/category/{{category.pk}}/'">{{category.inserted_category}}</button>
             {%endfor%}
            
           <!-- entity 생성위한 form -->

@@ -151,18 +151,26 @@ def subcategory(request,pk):
     uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
     subcategories=subCategory.objects.filter(inserted_category=uc)
     
-    context={'category_name':uc.inserted_category,'subCategories':subcategories}
+    context={'category':uc,'category_name':uc.inserted_category,'subCategories':subcategories,'category_pk':uc.pk}
 
     return render(request,"main/subcategory.html",context=context)
 
 def subcategory_detail(request,pk):
 
     subuc=subCategory.objects.get(id=pk)
-    contents=Content.objects.filter(Q(sub_category1=subuc.sub_category)|Q(sub_category2=subuc.sub_category))
-    main_category=subuc.inserted_category.inserted_category
-    sub_category=subuc.sub_category
+    main_category=subuc.inserted_category
+    
+    contents=Content.objects.filter(Q(inserted_category=main_category)&Q(sub_category1=subuc.sub_category)|Q(sub_category2=subuc.sub_category))
+    
+    main_category_name=main_category.inserted_category
+    sub_category_name=subuc.sub_category
 
-    context={'contents':contents,'main_category':main_category,'sub_category':sub_category
+    context={'contents':contents,
+             'main_category':main_category,
+             'main_category_name':main_category_name,
+             'sub_category':subuc,
+             'sub_category_name':sub_category_name,
+
     }
 
     return render(request,"main/sub_detail.html",context=context)
@@ -278,10 +286,12 @@ def add_contents(request,answer_str,question_str):
     content.save()
 
     # sub_category entity 생성
-    sub=subCategory(inserted_category=uc,
-                    sub_category=sub_categories[0])
-    
-    sub.save()
+    try:
+        sub = subCategory.objects.get(inserted_category=uc, sub_category=sub_categories[0])
+    except subCategory.DoesNotExist:
+        # 객체가 없으면 새로운 객체 생성
+        sub = subCategory(inserted_category=uc, sub_category=sub_categories[0])
+        sub.save()
 
     return
             
