@@ -12,4 +12,11 @@ class Content(models.Model):
 
     inserted_category=models.ForeignKey(UserCategory,on_delete=models.SET_NULL, null=True)
     sub_category1=models.CharField(max_length=32,null=True)
+<<<<<<< HEAD
     sub_category2=models.CharField(max_length=32,null=True)
+    
+#selected_category=models.CharField(max_length=32,null=True)
+    
+=======
+    sub_category2=models.CharField(max_length=32,null=True)
+>>>>>>> main

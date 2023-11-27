@@ -7,11 +7,13 @@ from django.contrib import auth
 from .forms import SignupForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
+
 import requests
 import json
 from django.http.request import HttpRequest
 from .models import Content
-from user.models import UserCategory
+from user.models import UserCategory,subCategory
 #pip install nltk, scikit-learn, pandas, konlpy 필요
 import nltk
 from nltk.corpus import stopwords
@@ -147,6 +149,35 @@ def category(request):
     context={'userCategories':userCategories}
 
     return render(request,"main/category.html",context=context)
+    
+def subcategory(request,pk):
+    
+    uc=UserCategory.objects.get(id=pk,user_id__username=request.user.username)
+    subcategories=subCategory.objects.filter(inserted_category=uc)
+    
+    context={'category':uc,'category_name':uc.inserted_category,'subCategories':subcategories,'category_pk':uc.pk}
+
+    return render(request,"main/subcategory.html",context=context)
+
+def subcategory_detail(request,pk):
+
+    subuc=subCategory.objects.get(id=pk)
+    main_category=subuc.inserted_category
+    
+    contents=Content.objects.filter(Q(inserted_category=main_category)&Q(sub_category1=subuc.sub_category)|Q(sub_category2=subuc.sub_category))
+    
+    main_category_name=main_category.inserted_category
+    sub_category_name=subuc.sub_category
+
+    context={'contents':contents,
+             'main_category':main_category,
+             'main_category_name':main_category_name,
+             'sub_category':subuc,
+             'sub_category_name':sub_category_name,
+
+    }
+
+    return render(request,"main/sub_detail.html",context=context)
 
 def subcategory(request,pk):
     
@@ -202,6 +233,7 @@ def proxy(request):
             answer=data['pTagContents']
             full_answer=data['complexContents']
             question_text=data['questionText']
+            print("Test",question_text)
 
             #question_str에 1/1 포함되있는 경우 없애기
             if question_text[0]=='1':
@@ -279,12 +311,44 @@ def add_contents(request,answer_str,question_str):
     content.save()
 
     # sub_category entity 생성
-    sub=subCategory(inserted_category=uc,
-                    sub_category=sub_categories[0])
-    
-    sub.save()
+    try:
+        sub = subCategory.objects.get(inserted_category=uc, sub_category=sub_categories[0])
+    except subCategory.DoesNotExist:
+        # 객체가 없으면 새로운 객체 생성
+        sub = subCategory(inserted_category=uc, sub_category=sub_categories[0])
+        sub.save()
 
     return
+            
+    
+    
+def preprocessing_eng(data):
+    tokenized = data['answer'].apply(lambda x: [word for word in x if len(word) > 2])
+    detokenized = []
+    for i in range(len(data)):
+        t = ' '.join(tokenized[i])
+        detokenized.append(t)
+    context = detokenized
+    #stop_words_list = stopwords.words('english')
+    vectorizer = TfidfVectorizer(stop_words='english',max_features=10)
+    X = vectorizer.fit_transform(context)
+    
+    return X, vectorizer 
+    
+'''
+def preprocessing_kr(data):
+    okt = Okt()
+    tokenized = data['answer'].apply(lambda x: [word for word in okt.nouns(x)]) #명사로만 **
+    detokenized = []
+    for i in range(len(data)):
+        t = ' '.join(tokenized[i])
+        detokenized.append(t)
+    context = detokenized
+    vectorizer = TfidfVectorizer(max_features=10)
+    X = vectorizer.fit_transform(context)
+    
+    return X, vectorizer
+'''
     
 def get_category(top_features):
     selected_category=""
