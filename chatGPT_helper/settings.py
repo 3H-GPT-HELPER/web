@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     
     #kakao login
     'allauth.socialaccount.providers.kakao',
@@ -117,7 +118,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-
+    #"allauth.account.middleware.AllAuthMiddleware",
+    #"allauth.account.middleware.AuthenticationMiddleware",
     
 ]
 
