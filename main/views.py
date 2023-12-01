@@ -285,7 +285,16 @@ def add_contents(request,answer_str,question_str):
         sub.save()
 
     return
-            
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
+
+@require_http_methods(["DELETE"])
+def delete_content(request, content_id):
+    content = get_object_or_404(Content, id=content_id)
+    content.delete()
+    return JsonResponse({'message': 'Content deleted successfully'})
     
     
 def preprocessing_eng(data):

@@ -21,6 +21,7 @@ urlpatterns = [
     #path('category/<int:pk>/',views.category_detail,name="detail_page"),
     path('proxy',views.proxy,name='proxy'),
     path('signout', views.signout, name='signout'),
+    path('delete_content/<int:content_id>/',views.delete_content,name='delete_content')
     
 ]
  
